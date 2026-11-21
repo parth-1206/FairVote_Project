@@ -1,0 +1,3592 @@
+<!DOCTYPE html>
+<html lang="en" data-font="md">
+<head>
+<meta charset="utf-8">
+<title>FairVote AI | Secure Voting &amp; Anomaly Detection System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="FairVote AI - An independent AI-powered election monitoring platform with real-time anomaly detection using Isolation Forest algorithm.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap">
+<style>
+/* ==========================================================================
+   FAIRVOTE DESIGN SYSTEM VARIABLES
+   ========================================================================== */
+:root {
+  /* Primary Government Colors */
+  --eci-navy: #003580;
+  --eci-dark: #001F3F;
+  --eci-darker: #001529;
+  --eci-nav: #004B8D;
+  --eci-nav-active: #002A54;
+  --eci-nav-hover: #003B72;
+  --eci-saffron: #FF6600;
+  --eci-saffron-dark: #E8460A;
+  --eci-saffron-light: #FFF2E6;
+  --eci-green: #1A7A1A;
+  --eci-green-dark: #136013;
+  --eci-green-light: #E8F5E9;
+  --eci-gold: #D4AF37;
+  --eci-gold-light: #FFF9E6;
+  
+  /* Background & Surfaces */
+  --bg: #F0F4F8;
+  --surface: #FFFFFF;
+  --surface-alt: #F8FAFC;
+  --surface-2: #EEF2F6;
+  --border: #CCCCCC;
+  --border-light: #E2E8F0;
+  --border-dark: #A0AEC0;
+  
+  /* Typography */
+  --ink: #212529;
+  --ink-2: #495057;
+  --ink-3: #6C757D;
+  --ink-light: #868E96;
+  
+  /* Status Semantics */
+  --crit: #C62828;
+  --crit-bg: #FFEBEE;
+  --warn: #E65100;
+  --warn-bg: #FFF3E0;
+  --good: #1A7A1A;
+  --good-bg: #E8F5E9;
+  --info: #004B8D;
+  --info-bg: #E3F2FD;
+  
+  /* Candidate Palette */
+  --s1: #003580;
+  --s2: #1A7A1A;
+  --s3: #D97706;
+  --s4: #5C6BC0;
+  
+  /* Elevation & Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 31, 63, 0.08);
+  --shadow: 0 2px 8px rgba(0, 31, 63, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 31, 63, 0.18);
+  
+  /* Fonts */
+  --font-main: 'Noto Sans', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: 'Courier New', Consolas, Menlo, Monaco, monospace;
+  
+  --radius: 4px;
+  --radius-sm: 3px;
+}
+
+/* Font Scaling Accessibility */
+html[data-font="sm"] { font-size: 13px; }
+html[data-font="md"] { font-size: 14px; }
+html[data-font="lg"] { font-size: 16px; }
+
+/* ==========================================================================
+   HIGH CONTRAST MODE (OFFICIAL GOVERNMENT ACCESSIBILITY STANDARD)
+   Yellow on Black / Cyan Links / Yellow Borders
+   ========================================================================== */
+html[data-theme="high-contrast"] {
+  background-color: #000000 !important;
+  color: #FFFF00 !important;
+}
+html[data-theme="high-contrast"] body {
+  background: #000000 !important;
+  color: #FFFF00 !important;
+}
+html[data-theme="high-contrast"] .top-utility-bar,
+html[data-theme="high-contrast"] .gov-header,
+html[data-theme="high-contrast"] .gov-nav-wrap,
+html[data-theme="high-contrast"] .gov-footer,
+html[data-theme="high-contrast"] .panel,
+html[data-theme="high-contrast"] .kpi-card,
+html[data-theme="high-contrast"] .ticker-bar,
+html[data-theme="high-contrast"] .breadcrumb-bar,
+html[data-theme="high-contrast"] .alert-card,
+html[data-theme="high-contrast"] .drawer,
+html[data-theme="high-contrast"] .receipt-card,
+html[data-theme="high-contrast"] .threat-banner {
+  background: #000000 !important;
+  border-color: #FFFF00 !important;
+  color: #FFFF00 !important;
+  box-shadow: none !important;
+}
+html[data-theme="high-contrast"] h1,
+html[data-theme="high-contrast"] h2,
+html[data-theme="high-contrast"] h3,
+html[data-theme="high-contrast"] h4,
+html[data-theme="high-contrast"] b,
+html[data-theme="high-contrast"] strong,
+html[data-theme="high-contrast"] span,
+html[data-theme="high-contrast"] p,
+html[data-theme="high-contrast"] label,
+html[data-theme="high-contrast"] div {
+  color: #FFFF00 !important;
+}
+html[data-theme="high-contrast"] a,
+html[data-theme="high-contrast"] .idbtn,
+html[data-theme="high-contrast"] .nav[aria-current="page"] {
+  color: #00FFFF !important;
+}
+html[data-theme="high-contrast"] .nav[aria-current="page"] {
+  border-bottom: 4px solid #FFFF00 !important;
+  background: #111111 !important;
+}
+html[data-theme="high-contrast"] .nav:hover {
+  background: #222222 !important;
+}
+html[data-theme="high-contrast"] .btn {
+  background: #000000 !important;
+  color: #FFFF00 !important;
+  border: 1px solid #FFFF00 !important;
+}
+html[data-theme="high-contrast"] .btn.primary {
+  background: #FFFF00 !important;
+  color: #000000 !important;
+  border: 1px solid #FFFF00 !important;
+  font-weight: 700 !important;
+}
+html[data-theme="high-contrast"] input,
+html[data-theme="high-contrast"] select,
+html[data-theme="high-contrast"] textarea {
+  background: #000000 !important;
+  color: #FFFF00 !important;
+  border: 1px solid #FFFF00 !important;
+}
+html[data-theme="high-contrast"] table,
+html[data-theme="high-contrast"] th,
+html[data-theme="high-contrast"] td {
+  background: #000000 !important;
+  border-color: #FFFF00 !important;
+  color: #FFFF00 !important;
+}
+html[data-theme="high-contrast"] .pill,
+html[data-theme="high-contrast"] .chip {
+  background: #000000 !important;
+  border: 1px solid #FFFF00 !important;
+  color: #FFFF00 !important;
+}
+html[data-theme="high-contrast"] .chip[aria-pressed="true"] {
+  background: #FFFF00 !important;
+  color: #000000 !important;
+}
+html[data-theme="high-contrast"] .chakra-logo circle,
+html[data-theme="high-contrast"] .chakra-logo line {
+  stroke: #FFFF00 !important;
+}
+
+/* ==========================================================================
+   RESET & TYPOGRAPHY
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 14px/1.55 var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h1, h2, h3, h4 {
+  color: var(--eci-navy);
+  font-weight: 700;
+  line-height: 1.25;
+}
+a { color: var(--eci-navy); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  transition: all 0.15s ease;
+}
+:focus-visible {
+  outline: 2px solid var(--eci-saffron);
+  outline-offset: 2px;
+}
+.num, .mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+td, th { font-variant-numeric: tabular-nums; }
+
+/* ==========================================================================
+   1. TOP UTILITY BAR (GOVERNMENT ACCESSIBILITY BAR)
+   ========================================================================== */
+.top-utility-bar {
+  background: var(--eci-dark);
+  color: #FFFFFF;
+  font-size: 11.5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 50;
+}
+.utility-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 4px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.utility-left, .utility-center, .utility-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.utility-link {
+  color: #E2E8F0;
+  font-size: 11px;
+  text-decoration: none;
+  padding: 2px 4px;
+}
+.utility-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+.font-scale-group {
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.font-btn {
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+.font-btn:last-child { border-right: none; }
+.font-btn:hover { background: rgba(255, 255, 255, 0.25); }
+
+.contrast-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+}
+.contrast-toggle:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.lang-toggle {
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+}
+.lang-toggle:hover { background: rgba(255, 255, 255, 0.25); }
+.clock-display {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: #FFE082;
+  font-size: 11px;
+}
+
+/* ==========================================================================
+   2. MAIN HEADER (FAIRVOTE OFFICIAL STYLE)
+   ========================================================================== */
+.tricolor-strip {
+  height: 6px;
+  width: 100%;
+  display: flex;
+  background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #138808 66.6%, #138808 100%);
+}
+.gov-header {
+  background: linear-gradient(135deg, #002B5C 0%, #003E7E 55%, #002244 100%);
+  color: #FFFFFF;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.header-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.emblem-wrapper {
+  flex: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+.header-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.emblem-hi {
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.emblem-en {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #FFE082;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.emblem-sub {
+  font-size: 10.5px;
+  color: #CFD8DC;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.portal-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.portal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.portal-hi {
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+.portal-en {
+  font-size: 11px;
+  color: #CFD8DC;
+}
+.portal-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.portal-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+.portal-tag.FairVote {
+  background: #FF6600;
+  color: #FFFFFF;
+}
+.portal-tag.model {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+}
+.portal-tag.live {
+  background: #C62828;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pulse-circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  animation: pulse-dot 1.5s infinite;
+}
+@keyframes pulse-dot {
+  0% { opacity: 1; transform: scale(0.9); }
+  50% { opacity: 0.4; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(0.9); }
+}
+
+/* ==========================================================================
+   3. HORIZONTAL TOP NAVIGATION BAR (NO SIDEBAR!)
+   ========================================================================== */
+.gov-nav-wrap {
+  background: var(--eci-nav);
+  border-bottom: 3px solid var(--eci-saffron);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.nav-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-container::-webkit-scrollbar { display: none; }
+
+.nav {
+  padding: 12px 18px;
+  color: #FFFFFF;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.15s ease;
+  position: relative;
+}
+.nav:first-child { border-left: 1px solid rgba(255, 255, 255, 0.12); }
+.nav:hover {
+  background: var(--eci-nav-hover);
+  color: #FFFFFF;
+}
+.nav[aria-current="page"] {
+  background: var(--eci-nav-active);
+  color: #FFE082;
+  font-weight: 700;
+  box-shadow: inset 0 -3px 0 #FF6600;
+}
+.nav svg {
+  opacity: 0.9;
+  flex: none;
+}
+.nav[aria-current="page"] svg {
+  stroke: #FFE082;
+}
+.nav-badge {
+  background: var(--crit);
+  color: #FFFFFF;
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 99px;
+  margin-left: 4px;
+}
+.nav-badge.warn { background: var(--warn); }
+
+/* ==========================================================================
+   4. MARQUEE TICKER BAR (GOVERNMENT SAFFRON BAR)
+   ========================================================================== */
+.ticker-bar {
+  background: var(--eci-saffron);
+  color: #FFFFFF;
+  padding: 7px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.ticker-label {
+  background: var(--eci-dark);
+  color: #FFFFFF;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.ticker-content {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-scroll {
+  display: inline-block;
+  padding-left: 100%;
+  animation: ticker-move 32s linear infinite;
+}
+.ticker-scroll:hover { animation-play-state: paused; }
+@keyframes ticker-move {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+.ticker-stats {
+  flex: none;
+  font-size: 11.5px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   5. BREADCRUMB BAR
+   ========================================================================== */
+.breadcrumb-bar {
+  background: #E8ECEF;
+  border-bottom: 1px solid var(--border);
+  padding: 7px 16px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.breadcrumb-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.breadcrumb-container a {
+  color: var(--eci-navy);
+  font-weight: 600;
+}
+.breadcrumb-sep { color: var(--ink-light); }
+.breadcrumb-current {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. MAIN CONTENT AREA
+   ========================================================================== */
+main {
+  flex: 1;
+  padding: 24px 16px 48px;
+}
+.gov-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Page Headings */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--border-light);
+}
+.page-title-box {
+  flex: 1;
+  min-width: 280px;
+  border-left: 5px solid var(--eci-saffron);
+  padding-left: 14px;
+}
+.page-title-box h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--eci-navy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.page-title-box p {
+  color: var(--ink-2);
+  margin-top: 4px;
+  font-size: 13.5px;
+}
+.page-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 600 11.5px/1 var(--font-mono);
+  padding: 6px 11px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.pill.good { background: var(--good-bg); color: var(--good); border-color: #A5D6A7; }
+.pill.warn { background: var(--warn-bg); color: var(--warn); border-color: #FFE082; }
+.pill.crit { background: var(--crit-bg); color: var(--crit); border-color: #FFCDD2; }
+.pill.acc  { background: var(--info-bg); color: var(--eci-navy); border-color: #90CAF9; }
+.pill.info { background: #ECEFF1; color: #455A64; border-color: #CFD8DC; }
+
+/* ==========================================================================
+   7. GOVERNMENT CARDS & KPI GRIDS
+   ========================================================================== */
+.kpis-6 {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3.5px solid var(--eci-navy);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.kpi-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+.kpi-card.acc-blue { border-top-color: var(--eci-navy); }
+.kpi-card.acc-emerald { border-top-color: var(--eci-green); }
+.kpi-card.acc-amber { border-top-color: var(--eci-saffron); }
+.kpi-card.acc-rose { border-top-color: var(--crit); }
+.kpi-card.acc-indigo { border-top-color: #3F51B5; }
+.kpi-card.acc-purple { border-top-color: #673AB7; }
+
+.kpi-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.kpi-label {
+  font: 700 11.5px/1.3 var(--font-main);
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.kpi-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--eci-navy);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.kpi-val {
+  font: 800 25px/1.1 var(--font-main);
+  color: var(--eci-navy);
+  margin-top: 8px;
+}
+.kpi-val small {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.kpi-trend {
+  font-size: 11.5px;
+  margin-top: 6px;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.kpi-trend.up { color: var(--good); }
+.kpi-trend.down { color: var(--crit); }
+.kpi-trend.neutral { color: var(--eci-navy); }
+
+/* ==========================================================================
+   8. PANELS & SECTIONS
+   ========================================================================== */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.panel > header {
+  padding: 12px 18px;
+  background: #F1F5F9;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.panel > header h2 {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--eci-navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel > header span.sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+}
+.panel .body {
+  padding: 18px;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 18px;
+}
+.grid2.even {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+/* ==========================================================================
+   9. MAP & STATUS GRID (72 STATIONS)
+   ========================================================================== */
+.map-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.map-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-2);
+  padding: 6px 10px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+.map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.map-legend i {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+.map-grid-wrap {
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 7px;
+}
+.map-node {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font: 700 11px/1 var(--font-mono);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+.map-node:hover {
+  transform: scale(1.15);
+  z-index: 5;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  border-color: var(--eci-navy);
+}
+.map-node.normal {
+  background: #EBF3FA;
+  border-color: #B8D5E5;
+  color: var(--eci-navy);
+}
+.map-node.flagged {
+  background: var(--crit-bg);
+  border-color: var(--crit);
+  color: var(--crit);
+  animation: pulse-border 2s infinite;
+}
+.map-node.review {
+  background: var(--warn-bg);
+  border-color: var(--warn);
+  color: var(--warn);
+}
+.map-node.escalated {
+  background: #C62828;
+  border-color: #8E0000;
+  color: #FFFFFF;
+  animation: pulse-crit 1.5s infinite;
+}
+.map-node.cleared {
+  background: var(--good-bg);
+  border-color: var(--good);
+  color: var(--good);
+}
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.4); }
+  50% { box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.2); }
+}
+@keyframes pulse-crit {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.6); }
+  50% { transform: scale(1.06); box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.3); }
+}
+
+/* ==========================================================================
+   10. TABLES (GOVERNMENT DATA TABLE STYLE)
+   ========================================================================== */
+.tablewrap { overflow-x: auto; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 820px;
+  background: var(--surface);
+}
+th {
+  font: 700 11.5px/1 var(--font-main);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: var(--eci-navy);
+  padding: 10px 14px;
+  border: 1px solid var(--eci-navy);
+  text-align: left;
+  white-space: nowrap;
+}
+th button {
+  color: #FFFFFF;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+th button:hover { color: #FFE082; }
+td {
+  padding: 10px 14px;
+  border: 1px solid var(--border-light);
+  font-size: 13px;
+  vertical-align: middle;
+}
+tbody tr:nth-child(even) {
+  background: #F8FAFC;
+}
+tbody tr:hover {
+  background: #EDF4FA;
+}
+tbody tr.flag {
+  background: #FFF5F5;
+}
+tbody tr.flag td:first-child {
+  box-shadow: inset 4px 0 0 var(--crit);
+}
+tbody tr.escalated-row {
+  background: #FFEBEE;
+}
+tbody tr.escalated-row td:first-child {
+  box-shadow: inset 4px 0 0 #B71C1C;
+}
+
+td .idbtn {
+  font-weight: 700;
+  color: var(--eci-navy);
+  font-family: var(--font-mono);
+}
+td .idbtn:hover { text-decoration: underline; color: var(--eci-saffron); }
+td .sub { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+
+/* Progress Bar in Tables */
+.conf-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.conf-track {
+  width: 70px;
+  height: 6px;
+  background: var(--border-light);
+  border-radius: 3px;
+  overflow: hidden;
+  flex: none;
+}
+.conf-fill { height: 100%; border-radius: 3px; }
+
+/* Candidate Vote Bars */
+.bars { display: flex; flex-direction: column; gap: 12px; }
+.crow {
+  background: #F8FAFC;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.crow .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cand-lead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cand-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 14px;
+  flex: none;
+}
+.crow .nm { font-weight: 700; font-size: 14px; }
+.crow .pt { font-size: 12px; color: var(--ink-3); }
+.crow .track {
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.crow .fill { height: 100%; border-radius: 4px; }
+
+/* ==========================================================================
+   11. BUTTONS, CHIPS, CONTROLS
+   ========================================================================== */
+.btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  font-weight: 600;
+  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.btn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-dark);
+}
+.btn.primary {
+  background: var(--eci-navy);
+  border-color: var(--eci-navy);
+  color: #FFFFFF;
+}
+.btn.primary:hover {
+  background: #002244;
+}
+.btn.danger {
+  color: var(--crit);
+  border-color: var(--crit);
+  background: var(--surface);
+}
+.btn.danger:hover {
+  background: var(--crit-bg);
+}
+.btn.success {
+  color: var(--good);
+  border-color: var(--good);
+  background: var(--surface);
+}
+.btn.success:hover {
+  background: var(--good-bg);
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  border-radius: var(--radius-sm);
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.chip:hover { border-color: var(--eci-navy); }
+.chip[aria-pressed="true"] {
+  background: var(--eci-navy);
+  color: #FFFFFF;
+  border-color: var(--eci-navy);
+}
+
+.slider { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.slider label { font-weight: 700; font-size: 13.5px; color: var(--eci-navy); }
+input[type=range] { accent-color: var(--eci-navy); width: 220px; cursor: pointer; }
+
+.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.metrics > div { padding: 14px 18px; border-left: 1px solid var(--border-light); }
+.metrics > div:first-child { border-left: 0; }
+.metrics .l { font: 700 11px/1 var(--font-main); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
+.metrics .v { font: 800 24px/1.1 var(--font-main); color: var(--eci-navy); margin-top: 6px; }
+.note { font-size: 12.5px; color: var(--ink-2); background: #F8FAFC; border: 1px solid var(--border-light); border-left: 3px solid var(--eci-navy); border-radius: var(--radius-sm); padding: 10px 14px; line-height: 1.5; }
+
+/* Threat Banner */
+.threat-banner {
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid;
+  flex-wrap: wrap;
+}
+.threat-banner.level-low {
+  background: #E8F5E9;
+  border-color: #A5D6A7;
+}
+.threat-banner.level-medium {
+  background: #FFF8E1;
+  border-color: #FFE082;
+}
+.threat-banner.level-high {
+  background: #FFEBEE;
+  border-color: #FFCDD2;
+}
+.threat-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.threat-shield-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.level-low .threat-shield-icon { background: var(--good); color: #FFF; }
+.level-medium .threat-shield-icon { background: var(--warn); color: #FFF; }
+.level-high .threat-shield-icon { background: var(--crit); color: #FFF; }
+.threat-info h3 { font-size: 16.5px; font-weight: 800; }
+.threat-info p { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+
+.alert-marquee {
+  background: var(--crit-bg);
+  border: 1px solid #FFCDD2;
+  color: var(--crit);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   12. CHARTS & PLOTS
+   ========================================================================== */
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--ink-2); font: 11px var(--font-mono); }
+.chart .gl { stroke: #E2E8F0; stroke-width: 1; }
+.chart .ax { stroke: #A0AEC0; stroke-width: 1.2; }
+.plot { position: relative; }
+.tip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--eci-dark);
+  color: #FFFFFF;
+  font-size: 11.5px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transform: translate(-50%, -125%);
+  z-index: 10;
+  line-height: 1.45;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.legend i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: -1px;
+}
+
+/* Lists & Timeline */
+.list { display: flex; flex-direction: column; }
+.item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border-light);
+  width: 100%;
+  background: none;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+.item:first-child { border-top: 0; }
+button.item:hover { background: #F8FAFC; }
+.item .grow { flex: 1; min-width: 0; }
+.item .t { font-weight: 600; font-size: 13.5px; }
+.item .s { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+.dot.vote { background: var(--good); }
+.dot.dup { background: var(--crit); }
+.dot.review { background: var(--warn); }
+.dot.system { background: var(--eci-navy); }
+
+/* Timeline Item (for suspicious activity) */
+.timeline-item {
+  display: flex;
+  gap: 14px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-light);
+  align-items: flex-start;
+}
+.timeline-item:first-child { border-top: 0; }
+.timeline-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.timeline-icon.crit { background: var(--crit-bg); color: var(--crit); }
+.timeline-icon.high { background: var(--warn-bg); color: var(--warn); }
+.timeline-icon.med { background: var(--info-bg); color: var(--eci-navy); }
+.timeline-icon.low { background: var(--good-bg); color: var(--good); }
+
+/* Alert Cards (Suspicious View) */
+.alert-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--eci-navy);
+}
+.alert-card.critical { border-left-color: var(--crit); }
+.alert-card.high { border-left-color: var(--warn); }
+.alert-card.medium { border-left-color: #F57F17; }
+.alert-card.low { border-left-color: var(--info); }
+.alert-card.acknowledged { opacity: 0.65; background: #F8FAFC; }
+
+.alert-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.alert-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.alert-icon-box {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.alert-card.critical .alert-icon-box { background: var(--crit-bg); color: var(--crit); }
+.alert-card.high .alert-icon-box { background: var(--warn-bg); color: var(--warn); }
+.alert-card.medium .alert-icon-box { background: #FFF9C4; color: #F57F17; }
+.alert-card.low .alert-icon-box { background: var(--info-bg); color: var(--eci-navy); }
+
+.alert-title { font-weight: 700; font-size: 14.5px; color: var(--eci-navy); }
+.alert-desc { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+.alert-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-light);
+  flex-wrap: wrap;
+}
+.alert-station {
+  font: 700 12px/1 var(--font-mono);
+  color: var(--eci-navy);
+}
+
+/* ==========================================================================
+   13. VOTER PORTAL STYLES (FAIRVOTE STYLE)
+   ========================================================================== */
+.stepper-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.stepper-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 12px/1 var(--font-main);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  color: var(--ink-3);
+  background: var(--surface);
+}
+.stepper-step.active {
+  background: var(--eci-navy);
+  color: #FFFFFF;
+  border-color: var(--eci-navy);
+}
+.stepper-step.completed {
+  background: var(--good-bg);
+  color: var(--good);
+  border-color: #A5D6A7;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-weight: 700; font-size: 13px; color: var(--eci-navy); }
+.field input[type=text], .field input[type=password] {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  width: 100%;
+}
+.field input:focus {
+  border-color: var(--eci-navy);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 53, 128, 0.2);
+}
+.err { color: var(--crit); font-size: 13px; font-weight: 600; min-height: 1.2em; }
+
+.cand {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  cursor: pointer;
+  background: var(--surface);
+  transition: all 0.15s ease;
+}
+.cand:hover { border-color: var(--eci-navy); background: #F8FAFC; }
+.cand:has(input:checked) {
+  border-color: var(--eci-navy);
+  background: #EBF3FA;
+  box-shadow: 0 0 0 2px var(--eci-navy);
+}
+.cand input { accent-color: var(--eci-navy); width: 18px; height: 18px; flex: none; }
+.sym { width: 38px; height: 38px; border-radius: var(--radius-sm); display: grid; place-items: center; font: 800 16px var(--font-main); color: #FFF; flex: none; }
+.cand .grow { flex: 1; min-width: 0; }
+.cand b { display: block; font-size: 15px; color: var(--eci-navy); }
+.cand small { color: var(--ink-3); font-size: 12px; }
+
+.receipt-card {
+  border: 2px dashed var(--eci-navy);
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #F8FAFC;
+  position: relative;
+  overflow: hidden;
+}
+.receipt-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
+}
+.receipt-ref {
+  font: 800 22px/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--eci-navy);
+}
+
+/* Confetti */
+.confetti-container {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 12px;
+  opacity: 0.85;
+  animation: confettiFall 3s linear infinite;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(320px) rotate(720deg); opacity: 0; }
+}
+
+.demo-ids { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12.5px; color: var(--ink-2); }
+.demo-ids button { font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--border); background: #F1F5F9; border-radius: var(--radius-sm); padding: 4px 8px; color: var(--eci-navy); font-weight: 600; }
+.demo-ids button:hover { background: #E2E8F0; }
+
+.checks { display: flex; flex-direction: column; gap: 12px; padding: 0; margin: 0; list-style: none; }
+.checks li { display: flex; gap: 10px; color: var(--ink-2); font-size: 13px; line-height: 1.5; }
+.checks svg { flex: none; margin-top: 2px; color: var(--good); }
+
+/* ==========================================================================
+   14. DRAWER (STATION REVIEW SLIDE-OVER)
+   ========================================================================== */
+.drawer-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 31, 63, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 100;
+  animation: fadeIn 0.15s ease;
+}
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(500px, 100%);
+  background: var(--surface);
+  border-left: 2px solid var(--eci-navy);
+  z-index: 101;
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.2s ease-out;
+}
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.drawer header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--eci-navy);
+  color: #FFFFFF;
+}
+.drawer header h2 { color: #FFFFFF; font-size: 18px; }
+.xbtn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: #FFFFFF;
+  flex: none;
+}
+.xbtn:hover { background: rgba(255, 255, 255, 0.3); }
+.dsec {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dsec h3 { font: 700 12px/1 var(--font-main); letter-spacing: 0.05em; text-transform: uppercase; color: var(--eci-navy); }
+.feat .row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
+.feat .row b { font-weight: 600; color: var(--eci-navy); }
+.range { position: relative; height: 6px; background: #E2E8F0; border-radius: 3px; margin: 6px 0 3px; }
+.range .med { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--ink-3); }
+.range .val { position: absolute; top: -4px; width: 14px; height: 14px; border-radius: 50%; margin-left: -7px; background: var(--eci-navy); border: 2px solid #FFF; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+.range .val.out { background: var(--crit); }
+
+/* ==========================================================================
+   15. TOAST NOTIFICATIONS
+   ========================================================================== */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 150;
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  background: var(--eci-dark);
+  color: #FFFFFF;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-lg);
+  font-size: 13px;
+  font-weight: 500;
+  max-width: 380px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 4px solid var(--eci-saffron);
+  animation: slideToast 0.25s ease-out;
+}
+@keyframes slideToast {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ==========================================================================
+   16. FAIRVOTE FOOTER
+   ========================================================================== */
+.gov-footer {
+  background: var(--eci-dark);
+  color: #E2E8F0;
+  border-top: 4px solid var(--eci-saffron);
+  margin-top: auto;
+}
+.footer-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px 16px 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
+  gap: 32px;
+}
+.footer-col h4 {
+  color: #FFE082;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  border-bottom: 2px solid rgba(255, 224, 130, 0.4);
+  padding-bottom: 4px;
+}
+.footer-col p {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #CFD8DC;
+}
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-links button, .footer-links a {
+  color: #ECEFF1;
+  font-size: 12.5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.footer-links button:hover, .footer-links a:hover {
+  color: #FFE082;
+  text-decoration: underline;
+}
+.footer-tech-specs {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: #CFD8DC;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.footer-tech-specs div span { color: #FFE082; font-weight: 700; }
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: #CFD8DC;
+}
+.helpline-box {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  margin-top: 6px;
+}
+.helpline-box b { color: #FF9933; font-size: 14px; }
+
+.footer-bottom-strip {
+  background: var(--eci-darker);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 11.5px;
+  color: #90A4AE;
+}
+.footer-bottom-strip p { margin: 2px 0; }
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (GOVERNMENT MOBILE STANDARDS)
+   ========================================================================== */
+@media (max-width: 1200px) {
+  .kpis-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .map-grid-wrap { grid-template-columns: repeat(9, 1fr); }
+  .footer-container { grid-template-columns: 1fr 1fr; gap: 24px; }
+}
+@media (max-width: 900px) {
+  .grid2, .grid2.even, .grid3 { grid-template-columns: 1fr; }
+  .kpis-6 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metrics > div:nth-child(3) { border-left: 0; }
+  .metrics > div:nth-child(n+3) { border-top: 1px solid var(--border-light); }
+  .header-container { flex-direction: column; align-items: flex-start; }
+  .footer-container { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .kpis-6 { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: 1fr; }
+  .metrics > div { border-left: 0 !important; border-top: 1px solid var(--border-light); }
+  .metrics > div:first-child { border-top: 0; }
+  .map-grid-wrap { grid-template-columns: repeat(6, 1fr); }
+  .utility-left, .utility-right { width: 100%; justify-content: space-between; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. TOP UTILITY BAR (ACCESSIBILITY & GOVERNMENT CONTROLS) -->
+<div class="top-utility-bar" role="region" aria-label="Accessibility & Utility Controls">
+  <div class="utility-container">
+    <div class="utility-left">
+      <a href="#view" class="utility-link">Skip to Main Content</a>
+      <span style="opacity:.4">|</span>
+      <a href="#" class="utility-link" onclick="showToast('Screen Reader', 'Screen Reader Access enabled. Standard ARIA 1.2 landmark compliance active.', 'info');return false;">Screen Reader Access</a>
+    </div>
+
+    <div class="utility-center">
+      <div class="font-scale-group" title="Text Resizing Controls">
+        <button class="font-btn" data-fontsize="sm" aria-label="Decrease Font Size">A-</button>
+        <button class="font-btn" data-fontsize="md" aria-label="Standard Font Size">A</button>
+        <button class="font-btn" data-fontsize="lg" aria-label="Increase Font Size">A+</button>
+      </div>
+
+      <button class="contrast-toggle" id="themebtn" type="button" aria-label="Toggle High Contrast Mode">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/>
+        </svg>
+        <span id="themelabel">High Contrast</span>
+      </button>
+    </div>
+
+    <div class="utility-right">
+      <button class="lang-toggle" id="lang-btn" type="button">English | हिन्दी</button>
+      <span style="opacity:.4">|</span>
+      <span class="clock-display" id="live-clock">--:--:-- IST</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2. TRICOLOR ACCENT BAND -->
+<div class="tricolor-strip" aria-hidden="true"></div>
+
+<!-- 3. MAIN HEADER (FAIRVOTE BRANDING) -->
+<header class="gov-header" role="banner">
+  <div class="header-container">
+    <div class="header-left">
+      <div class="emblem-wrapper">
+<svg width="46" height="46" viewBox="0 0 48 48" fill="none" aria-label="FairVote Logo">
+  <circle cx="24" cy="24" r="22" fill="#003580" stroke="#FF6600" stroke-width="2"/>
+  <path d="M24 8L12 16V26C12 33 17.5 39.5 24 42C30.5 39.5 36 33 36 26V16L24 8Z" fill="#FF6600" opacity="0.9"/>
+  <path d="M18 24l4.5 4.5L30 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="24" y="46" text-anchor="middle" fill="#FF6600" font-size="5" font-family="Arial" font-weight="bold">FV</text>
+</svg>
+      </div>
+      <div class="header-titles">
+        
+        
+        <div class="emblem-en" style="font-size:22px;font-weight:700;letter-spacing:0.5px;color:#fff;">FairVoting System</div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="portal-brand">
+<svg width="38" height="38" viewBox="0 0 24 24" fill="none" class="portal-shield" aria-label="FairVote Shield">
+  <path d="M12 2L3 7V12C3 17.5 7 21.6 12 22C17 21.6 21 17.5 21 12V7L12 2Z" fill="url(#portalShieldGrad)" stroke="#FFE082" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M9 12.2L11 14.2L15.5 9.8" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="12" cy="5.2" r="1.2" fill="#FFE082"/>
+  <defs>
+    <linearGradient id="portalShieldGrad" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6600"/>
+      <stop offset="0.5" stop-color="#003580"/>
+      <stop offset="1" stop-color="#138808"/>
+    </linearGradient>
+  </defs>
+</svg>
+        <div class="portal-info">
+          <div class="portal-hi">FairVote AI · सुरक्षित मतदान प्रणाली</div>
+          <div class="portal-en">Autonomous AI Election Surveillance &amp; Anomaly Monitor</div>
+          <div class="portal-tags">
+            <span class="portal-tag FairVote">FairVote 2026</span>
+            <span class="portal-tag model">Isolation Forest v2.4</span>
+            <span class="portal-tag live"><span class="pulse-circle"></span> Live Polls</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 4. HORIZONTAL TOP NAVIGATION BAR -->
+<nav class="gov-nav-wrap" role="navigation" aria-label="Main Navigation">
+  <div class="nav-container">
+    <button class="nav" data-view="overview" aria-current="page">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      होम / Home
+    </button>
+
+    <button class="nav" data-view="anomalies">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l5-5"/>
+      </svg>
+      विसंगति / Anomaly Monitor
+      <span class="nav-badge" id="navbadge" hidden>0</span>
+    </button>
+
+    <button class="nav" data-view="suspicious">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      संदिग्ध गतिविधि / Suspicious Activity
+      <span class="nav-badge warn" id="alertsbadge">16</span>
+    </button>
+
+    <button class="nav" data-view="fairness">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v18M6 21h12M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0L5 7ZM19 7l-3 7a3.5 3.5 0 0 0 6 0l-3-7Z"/>
+      </svg>
+      निष्पक्षता / Fairness Analysis
+    </button>
+
+    <button class="nav" data-view="audit">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r=".9"/><circle cx="3.5" cy="12" r=".9"/><circle cx="3.5" cy="18" r=".9"/>
+      </svg>
+      ऑडिट लॉग / Audit Trail
+    </button>
+
+    <button class="nav" data-view="voter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 13h16v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7Z"/><path d="M8 13V8l4-5 4 5v5"/><path d="M10 17l1.6 1.6L15 15"/>
+      </svg>
+      मतदाता पोर्टल / Voter Portal
+    </button>
+  </div>
+</nav>
+
+<!-- 5. MARQUEE TICKER BAR -->
+<div class="ticker-bar" role="region" aria-label="Live Election Ticker">
+  <span class="ticker-label">🔴 LIVE NOTICE:</span>
+  <div class="ticker-content">
+    <div class="ticker-scroll">
+      🔴 Ward Council General Election 2026 | Real-time AI Anomaly Detection Active | 72 Polling Stations Reporting | Isolation Forest Model: 150 Trees | Zero-Knowledge Ballot Encryption Active | Toll-Free ECI Election Helpline: 1950 | सभी मतदाता अपने मताधिकार का प्रयोग निर्भीक होकर करें
+    </div>
+  </div>
+  <div class="ticker-stats">
+    <span>Votes Cast: <b id="sidebar-cast">--</b></span>
+    <span>Flagged: <b id="sidebar-flagged" style="color:#FFF;background:#C62828;padding:1px 5px;border-radius:2px">--</b></span>
+  </div>
+</div>
+
+<!-- 6. BREADCRUMB BAR -->
+<div class="breadcrumb-bar">
+  <div class="breadcrumb-container" id="breadcrumb">
+    <a href="#overview" data-go="overview">मुख्य पृष्ठ (Home)</a>
+    <span class="breadcrumb-sep">&gt;</span>
+    <span class="breadcrumb-current" id="breadcrumb-current">चुनाव अवलोकन (Election Overview)</span>
+  </div>
+</div>
+
+<!-- 7. MAIN VIEWPORT -->
+<main>
+  <div class="gov-container" id="view"></div>
+</main>
+
+<!-- 8. PROFESSIONAL GOVERNMENT FOOTER -->
+<footer class="gov-footer" role="contentinfo">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>FairVote AI चुनाव प्रणाली / About FairVote AI</h4>
+      <p>
+        The FairVote AI System is an official FairVote AI Election Monitoring System</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>त्वरित लिंक / Quick Links</h4>
+      <ul class="footer-links">
+        <li><button data-go="overview">➔ चुनाव अवलोकन / Overview</button></li>
+        <li><button data-go="anomalies">➔ विसंगति निगरानी / Anomaly Monitor</button></li>
+        <li><button data-go="suspicious">➔ संदिग्ध गतिविधि / Suspicious Activity</button></li>
+        <li><button data-go="fairness">➔ निष्पक्षता विश्लेषण / Fairness Analysis</button></li>
+        <li><button data-go="audit">➔ ऑडिट ट्रेल / Audit Log</button></li>
+        <li><button data-go="voter">➔ मतदाता पोर्टल / Voter Services</button></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>तकनीकी विनिर्देश / Tech Specs</h4>
+      <div class="footer-tech-specs">
+        <div><span>Algorithm:</span> Isolation Forest (Liu et al.)</div>
+        <div><span>Ensemble:</span> 150 Isolation Trees (ψ=48)</div>
+        <div><span>Ledger Hash:</span> SHA-256 Merkle Root</div>
+        <div><span>Fairness Test:</span> EEOC 80% Four-Fifths Rule</div>
+        <div><span>Voter Privacy:</span> Zero-Knowledge Masking</div>
+        <div><span>Status:</span> 72 of 72 Precincts Reporting</div>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>राष्ट्रीय सहायता केंद्र / FairVote Support</h4>
+      <div class="footer-contact">
+        <div><b>FairVote AI System</b></div>
+        <div>FairVote Tech Hub, Electronic City, Bengaluru - 560100</div>
+        <div>FairVote Headquarters, Tech Park, Bengaluru 560001</div>
+        <div class="helpline-box">
+          <div>राष्ट्रीय मतदाता हेल्पलाइन (Toll Free):</div>
+          <b>📞 1950 (National Voter Helpline)</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom-strip">
+    <p>&#169; 2026 FairVote AI System | An Independent Election Security Research Project | All synthetic data for demo only</p>
+    <p>Built with &#10084;&#65039; using Isolation Forest ML Algorithm | Open Source Election Security Research</p>
+  </div>
+</footer>
+
+<!-- SLIDE-OVER DRAWER OVERLAY -->
+<div id="overlay"></div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Seeded Random Number Generator ---------- */
+function mulberry(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const R = mulberry(2026);
+const gauss = (m, s) => {
+  let u = 0, v = 0;
+  while(!u) u = R();
+  v = R();
+  return m + s * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+};
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const IN = n => Math.round(n).toLocaleString('en-IN');
+
+/* ---------- Election Setup & Domain Constants ---------- */
+const CANDS = [
+  { name: 'Meera Kulkarni (मीरा कुलकर्णी)', party: 'Civic Forward Party', color: 'var(--s1)', base: 38 },
+  { name: 'Rohan Verma (रोहन वर्मा)', party: "People's Alliance", color: 'var(--s2)', base: 30 },
+  { name: 'Farah Siddiqui (फराह सिद्दीकी)', party: 'Green Commons', color: 'var(--s3)', base: 20 },
+  { name: 'Arjun Nair (अर्जुन नायर)', party: 'Independent', color: 'var(--s4)', base: 12 }
+];
+
+const FEATS = [
+  { k: 'turnout', label: 'Turnout (मतदान)', unit: '%' },
+  { k: 'reject', label: 'Rejected ballots (अस्वीकृत मत)', unit: '%' },
+  { k: 'leader', label: "Leading candidate's share (अग्रणी प्रत्याशी शेयर)", unit: '%' },
+  { k: 'late', label: 'Votes in last 2 hours (अंतिम 2 घंटे मतदान)', unit: '%' },
+  { k: 'swing', label: 'Turnout swing vs 2021 (2021 तुलनात्मक झुकाव)', unit: ' pts' }
+];
+
+const WARDS = ['Ashok Nagar','Lake View','Rampur','Civil Lines','Mill Road','Harbour Gate','Green Park','Kasba','Nehru Colony','Old Market','Hill Top','Riverside'];
+const VENUES = ['Govt. School (रा.उ. विद्यालय)','Community Hall (सामुदायिक भवन)','Primary School (प्रा. विद्यालय)','Panchayat Bhawan (पंचायत भवन)','Town Library (नगर पुस्तकालय)'];
+const REGIONS = ['Urban','Semi-urban','Rural'];
+const ROFF = { Urban: { t: -3, l: -1 }, 'Semi-urban': { t: 1, l: 0 }, Rural: { t: 4, l: 2 } };
+
+/* ---------- Synthetic Polling Station Data Generation ---------- */
+const N = 72;
+const truthIdx = new Set();
+(function(){
+  const order = [...Array(N).keys()].sort(() => R() - 0.5);
+  for(let i = 0; i < 8; i++) truthIdx.add(order[i]);
+})();
+const truthTypes = ['turnout','reject','skew','swing','turnout','skew','reject','swing'];
+const STATIONS = [];
+let ti = 0;
+
+for(let i = 0; i < N; i++){
+  const rr = R(), region = rr < 0.4 ? 'Urban' : rr < 0.7 ? 'Semi-urban' : 'Rural';
+  const off = ROFF[region];
+  const reg = Math.round(700 + R() * 1100);
+  let turnout = clamp(gauss(62 + off.t, 6), 42, 82);
+  let reject = clamp(gauss(1.6, 0.5), 0.5, 3.2);
+  let late = clamp(gauss(15 + off.l, 3.2), 7, 25);
+  let swing = gauss(0, 3.4);
+  let sh = CANDS.map(c => Math.max(3, c.base + gauss(0, 3.2)));
+  const truth = truthIdx.has(i);
+  let type = null;
+
+  if(truth){
+    type = truthTypes[ti++];
+    if(type === 'turnout'){ turnout = gauss(93, 1.8); late = gauss(38, 3.5); swing = turnout - gauss(62, 3); }
+    if(type === 'reject'){ reject = gauss(7.4, 1); }
+    if(type === 'skew'){
+      const w = Math.floor(R() * 4);
+      const big = 78 + R() * 10;
+      const rest = sh.filter((_, j) => j !== w).reduce((a, b) => a + b, 0);
+      sh = sh.map((v, j) => j === w ? big : v / rest * (100 - big));
+    }
+    if(type === 'swing'){ turnout = gauss(80, 1.5); swing = gauss(22, 2.5); }
+  }
+
+  const tot = sh.reduce((a, b) => a + b, 0);
+  sh = sh.map(v => v / tot * 100);
+  const cast = Math.round(reg * turnout / 100);
+  const valid = Math.round(cast * (1 - reject / 100));
+
+  STATIONS.push({
+    id: 'PS-' + String(i + 1).padStart(3, '0'),
+    name: WARDS[i % WARDS.length] + ' ' + VENUES[Math.floor(R() * VENUES.length)],
+    region, reg, cast, valid, turnout, reject, late, swing,
+    shares: sh, leader: Math.max(...sh), leadIdx: sh.indexOf(Math.max(...sh)),
+    truth, type,
+    votes: sh.map(s => Math.round(valid * s / 100))
+  });
+}
+
+/* ---------- Isolation Forest Algorithm (Liu, Ting, Zhou 2008) ---------- */
+function iforest(X, trees, psi, rnd){
+  const n = X.length, d = X[0].length, hl = Math.ceil(Math.log2(psi));
+  const c = m => m <= 1 ? 0 : m === 2 ? 1 : 2 * (Math.log(m - 1) + 0.5772156649) - 2 * (m - 1) / m;
+  
+  function build(idx, h){
+    if(h >= hl || idx.length <= 1) return { size: idx.length };
+    const f = Math.floor(rnd() * d);
+    let mn = Infinity, mx = -Infinity;
+    for(const i of idx){
+      const v = X[i][f];
+      if(v < mn) mn = v;
+      if(v > mx) mx = v;
+    }
+    if(mn === mx) return { size: idx.length };
+    const s = mn + rnd() * (mx - mn);
+    return {
+      f, s,
+      lo: build(idx.filter(i => X[i][f] < s), h + 1),
+      hi: build(idx.filter(i => X[i][f] >= s), h + 1)
+    };
+  }
+
+  const forest = [];
+  for(let t = 0; t < trees; t++){
+    const idx = [...Array(n).keys()];
+    for(let i = 0; i < psi; i++){
+      const j = i + Math.floor(rnd() * (n - i));
+      [idx[i], idx[j]] = [idx[j], idx[i]];
+    }
+    forest.push(build(idx.slice(0, psi), 0));
+  }
+
+  const path = (x, nd, h) => nd.f === undefined ? h + c(nd.size) : path(x, x[nd.f] < nd.s ? nd.lo : nd.hi, h + 1);
+  return X.map(x => Math.pow(2, -(forest.reduce((a, t) => a + path(x, t, 0), 0) / trees) / c(psi)));
+}
+
+const X = STATIONS.map(s => FEATS.map(f => s[f.k]));
+const TREES = 150, PSI = 48;
+const scores = iforest(X, TREES, PSI, mulberry(7));
+STATIONS.forEach((s, i) => s.score = scores[i]);
+
+const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+const sd = a => { const m = mean(a); return Math.sqrt(mean(a.map(v => (v - m) ** 2))); };
+const med = a => { const b = [...a].sort((x, y) => x - y), h = b.length >> 1; return b.length % 2 ? b[h] : (b[h - 1] + b[h]) / 2; };
+
+const STAT = FEATS.map((f, j) => {
+  const col = X.map(r => r[j]);
+  return { mean: mean(col), sd: sd(col), med: med(col), min: Math.min(...col), max: Math.max(...col) };
+});
+
+STATIONS.forEach(s => {
+  s.z = FEATS.map((f, j) => (s[f.k] - STAT[j].mean) / STAT[j].sd);
+  s.reasons = FEATS.map((f, j) => ({ f, j, z: s.z[j] }))
+                   .filter(o => Math.abs(o.z) >= 2)
+                   .sort((a, b) => Math.abs(b.z) - Math.abs(a.z))
+                   .slice(0, 2);
+});
+
+const RANKED = [...STATIONS].sort((a, b) => b.score - a.score);
+RANKED.forEach((s, i) => s.rank = i + 1);
+
+/* ---------- Suspicious Activity Alerts Generator ---------- */
+function generateRealisticAlerts(){
+  const alerts = [];
+  let alertSeq = 1001;
+
+  alerts.push({
+    id: 'ALT-' + (alertSeq++),
+    time: '10:38:17',
+    severity: 'CRITICAL',
+    stationId: 'PS-044',
+    title: 'Duplicate Ballot Attempt Intercepted (फर्जी मतदान अवरुद्ध)',
+    desc: 'Voter credential VTR-2026-••3390 attempted duplicate ballot submission after registering vote at PS-012. Cryptographic token blocked second signature.',
+    ack: false
+  });
+  alerts.push({
+    id: 'ALT-' + (alertSeq++),
+    time: '10:24:40',
+    severity: 'HIGH',
+    stationId: 'PS-009',
+    title: 'Credential Reuse Intercept (पहचान दुरुपयोग अवरोध)',
+    desc: 'Duplicate vote attempt with credential VTR-2026-••0902 blocked. Voter previously voted at Central Polling Booth.',
+    ack: false
+  });
+
+  RANKED.slice(0, 10).forEach(s => {
+    let sev = s.score > 0.65 ? 'CRITICAL' : s.score > 0.55 ? 'HIGH' : 'MEDIUM';
+    let title = 'Statistical Anomaly Detected (सांख्यिकीय विसंगति)';
+    let desc = `Isolation Forest score ${s.score.toFixed(3)}. Station deviates significantly from historical baseline.`;
+
+    if(s.turnout > 85){
+      title = `Abnormal Turnout Surge (${s.turnout.toFixed(1)}%) (अस्वाभाविक मतदान वृद्धि)`;
+      desc = `Station reports ${s.turnout.toFixed(1)}% turnout (+${(s.turnout - 62).toFixed(1)}% above ward average). High late-hour acceleration observed.`;
+    } else if(s.reject > 4.5){
+      title = `Elevated Ballot Invalidation (${s.reject.toFixed(1)}%) (अस्वीकृत मतों में असामान्य वृद्धि)`;
+      desc = `Unusually high rejected ballot rate (${s.reject.toFixed(1)}% vs regional norm 1.6%). Potential marking discrepancy or scanner miscalibration.`;
+    } else if(s.leader > 72){
+      title = `Asymmetric Vote Polarization (${s.leader.toFixed(1)}%) (एकपक्षीय मत ध्रुवीकरण)`;
+      desc = `Leading candidate captured ${s.leader.toFixed(1)}% share, exceeding 3σ statistical ceiling for multi-candidate ward.`;
+    } else if(Math.abs(s.swing) > 15){
+      title = `Severe Historical Turnout Swing (${s.swing > 0 ? '+' : ''}${s.swing.toFixed(1)} pts) (ऐतिहासिक मतदान विचलन)`;
+      desc = `Significant turnout divergence compared to 2021 election data without corresponding demographic shifts.`;
+    }
+
+    alerts.push({
+      id: 'ALT-' + (alertSeq++),
+      time: `10:${String(Math.floor(s.turnout % 60)).padStart(2, '0')}:${String(Math.floor(s.cast % 60)).padStart(2, '0')}`,
+      severity: sev,
+      stationId: s.id,
+      title,
+      desc,
+      ack: false
+    });
+  });
+
+  alerts.push({
+    id: 'ALT-' + (alertSeq++),
+    time: '09:42:15',
+    severity: 'LOW',
+    stationId: 'PS-018',
+    title: 'Telemetric Sync Latency (टेलीमेट्री सिंक विलंब)',
+    desc: 'Polling console experienced 420ms delay transmitting hourly tally packet. Auto-reconnection succeeded.',
+    ack: true
+  });
+  alerts.push({
+    id: 'ALT-' + (alertSeq++),
+    time: '09:15:30',
+    severity: 'LOW',
+    stationId: 'PS-033',
+    title: 'Routine Checksum Verification (नियमित चेकसम सत्यापन)',
+    desc: 'Local audit ledger validated against central cryptographic Merkle root with 100% hash parity.',
+    ack: true
+  });
+
+  return alerts;
+}
+
+const ALERTS_DATA = generateRealisticAlerts();
+
+/* ---------- Application State ---------- */
+const state = {
+  view: 'overview',
+  contam: 12,
+  sortK: 'score',
+  sortD: -1,
+  filter: 'flagged',
+  selected: null,
+  status: {},
+  extra: [0, 0, 0, 0],
+  dupNew: 0,
+  alerts: ALERTS_DATA,
+  alertFilter: 'all',
+  log: [
+    { t: '10:41:52', k: 'system', m: 'Isolation Forest run finished', s: N + ' stations scored · ' + TREES + ' trees' },
+    { t: '10:38:17', k: 'dup', m: 'Duplicate vote attempt blocked', s: 'VTR-2026-••3390 already voted at PS-044' },
+    { t: '10:31:05', k: 'vote', m: 'Ballot recorded', s: 'PS-017 Mill Road Govt. School' },
+    { t: '10:24:40', k: 'dup', m: 'Duplicate vote attempt blocked', s: 'VTR-2026-••0902 already voted at PS-009' },
+    { t: '10:12:26', k: 'vote', m: 'Ballot recorded', s: 'PS-052 Riverside Town Library' },
+    { t: '09:58:03', k: 'system', m: 'Turnout feed refreshed', s: '72 of 72 polling stations reporting' }
+  ],
+  voted: new Set(['VTR-2026-000118']),
+  voter: { step: 'login', id: '', choice: null, ref: '', err: '' }
+};
+
+const DUP_BASE = 14;
+const flaggedSet = () => {
+  const k = Math.round(state.contam / 100 * N);
+  return new Set(RANKED.slice(0, k).map(s => s.id));
+};
+const thresholdScore = () => {
+  const k = Math.max(1, Math.round(state.contam / 100 * N));
+  return RANKED[k - 1].score;
+};
+
+const nowT = () => new Date().toLocaleTimeString('en-GB');
+function addLog(k, m, s){ state.log.unshift({ t: nowT(), k, m, s: s || '' }); }
+const mask = id => id.slice(0, 9) + '••' + id.slice(-4);
+const STATUS = {
+  review: ['Under review (समीक्षाधीन)', 'warn'],
+  escalated: ['Escalated (जांच अग्रेषित)', 'crit'],
+  cleared: ['Cleared (निर्दोष घोषित)', 'good']
+};
+const pill = (txt, cls) => `<span class="pill ${cls || ''}">${txt}</span>`;
+
+function totals(){
+  const reg = STATIONS.reduce((a, s) => a + s.reg, 0);
+  const cast = STATIONS.reduce((a, s) => a + s.cast, 0);
+  const votes = CANDS.map((c, i) => STATIONS.reduce((a, s) => a + s.votes[i], 0) + state.extra[i]);
+  return {
+    reg,
+    cast: cast + state.extra.reduce((a, b) => a + b, 0),
+    votes,
+    valid: votes.reduce((a, b) => a + b, 0)
+  };
+}
+
+function metrics(){
+  const fl = flaggedSet();
+  const tp = STATIONS.filter(s => fl.has(s.id) && s.truth).length;
+  const truthN = STATIONS.filter(s => s.truth).length;
+  const p = fl.size ? tp / fl.size : 0;
+  const r = tp / truthN;
+  const f = (p + r) ? 2 * p * r / (p + r) : 0;
+  return { fl, tp, p, r, f, truthN };
+}
+
+function openCount(){
+  const fl = flaggedSet();
+  return STATIONS.filter(s => fl.has(s.id) && !state.status[s.id]).length;
+}
+
+/* ---------- Toast Notification Helper ---------- */
+function showToast(title, msg, type = 'info'){
+  const container = document.getElementById('toast-container');
+  if(!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  
+  let icon = '🔔';
+  if(type === 'crit') icon = '🚨';
+  if(type === 'good') icon = '✅';
+  if(type === 'warn') icon = '⚠️';
+
+  toast.innerHTML = `<span style="font-size:16px">${icon}</span><div><div style="font-weight:700;margin-bottom:1px">${title}</div><div style="font-size:12px;opacity:.9">${msg}</div></div>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(12px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+/* ---------- SVG Chart & Map Generators ---------- */
+function renderLiveElectionMap(){
+  const fl = flaggedSet();
+  let nodes = '';
+  STATIONS.forEach((s, idx) => {
+    let cls = 'normal';
+    if(state.status[s.id] === 'escalated') cls = 'escalated';
+    else if(state.status[s.id] === 'review') cls = 'review';
+    else if(state.status[s.id] === 'cleared') cls = 'cleared';
+    else if(fl.has(s.id)) cls = 'flagged';
+
+    nodes += `<div class="map-node ${cls}" data-open="${s.id}" title="${s.id} · ${s.name}&#10;Turnout: ${s.turnout.toFixed(1)}%&#10;Score: ${s.score.toFixed(3)}">${String(idx + 1).padStart(2, '0')}</div>`;
+  });
+
+  return `
+  <div class="map-container">
+    <div class="map-legend">
+      <span><i style="background:#EBF3FA;border:1px solid #B8D5E5"></i> सामान्य केंद्र (Normal Precinct)</span>
+      <span><i style="background:var(--crit)"></i> समीक्षा हेतु चिह्नित (Flagged for Review)</span>
+      <span><i style="background:var(--warn)"></i> विचाराधीन (Under Active Review)</span>
+      <span><i style="background:#C62828"></i> उच्चस्तरीय जांच (Escalated Investigation)</span>
+      <span><i style="background:var(--good)"></i> सामान्य सत्यापित (Cleared as Nominal)</span>
+    </div>
+    <div class="map-grid-wrap">
+      ${nodes}
+    </div>
+  </div>`;
+}
+
+function scatterSVG(){
+  const W = 640, H = 330, L = 46, B = 36, T = 14, Rm = 16, fl = flaggedSet();
+  const x0 = 40, x1 = 100, y0 = 0, y1 = 9;
+  const X_ = v => L + (v - x0) / (x1 - x0) * (W - L - Rm);
+  const Y_ = v => H - B - (v - y0) / (y1 - y0) * (H - B - T);
+  let g = '';
+
+  for(let v = 40; v <= 100; v += 10){
+    g += `<line class="gl" x1="${X_(v)}" x2="${X_(v)}" y1="${T}" y2="${H - B}"/><text x="${X_(v)}" y="${H - B + 16}" text-anchor="middle">${v}%</text>`;
+  }
+  for(let v = 0; v <= 9; v += 3){
+    g += `<line class="gl" x1="${L}" x2="${W - Rm}" y1="${Y_(v)}" y2="${Y_(v)}"/><text x="${L - 8}" y="${Y_(v) + 4}" text-anchor="end">${v}%</text>`;
+  }
+  g += `<line class="ax" x1="${L}" x2="${W - Rm}" y1="${H - B}" y2="${H - B}"/><text x="${(L + W - Rm) / 2}" y="${H - 4}" text-anchor="middle" font-weight="700">Turnout Percentage (मतदान प्रतिशत)</text>`;
+  g += `<text transform="translate(12 ${(T + H - B) / 2}) rotate(-90)" text-anchor="middle" font-weight="700">Rejected Ballots (%) (अस्वीकृत मत)</text>`;
+
+  const pts = [...STATIONS].sort((a, b) => fl.has(a.id) - fl.has(b.id)).map(s => {
+    const f = fl.has(s.id);
+    const col = f ? 'var(--crit)' : 'var(--eci-navy)';
+    return `<circle data-i="${s.id}" cx="${X_(s.turnout)}" cy="${Y_(Math.min(s.reject, y1 - 0.2))}" r="${f ? 6.5 : 4.5}" fill="${col}" fill-opacity="${f ? 0.95 : 0.55}" stroke="${f ? '#FFFFFF' : 'none'}" stroke-width="1.8" style="cursor:pointer"/>`;
+  }).join('');
+
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter plot of turnout vs rejected ballots">${g}${pts}</svg>`;
+}
+
+function histSVG(){
+  const W = 440, H = 290, L = 34, B = 36, T = 16, Rm = 12, bins = 12, lo = 0.3, hi = 0.8, th = thresholdScore();
+  const cnt = Array(bins).fill(0);
+  STATIONS.forEach(s => {
+    cnt[Math.min(bins - 1, Math.max(0, Math.floor((s.score - lo) / (hi - lo) * bins)))]++;
+  });
+  const mx = Math.max(...cnt), bw = (W - L - Rm) / bins, Y_ = v => H - B - v / mx * (H - B - T - 10);
+  let g = '';
+
+  [0, Math.round(mx / 2), mx].forEach(v => {
+    g += `<line class="gl" x1="${L}" x2="${W - Rm}" y1="${Y_(v)}" y2="${Y_(v)}"/><text x="${L - 6}" y="${Y_(v) + 4}" text-anchor="end">${v}</text>`;
+  });
+  cnt.forEach((c, i) => {
+    const binLo = lo + i * (hi - lo) / bins;
+    const above = binLo + (hi - lo) / bins > th;
+    g += `<rect x="${L + i * bw + 2}" y="${Y_(c)}" width="${bw - 4}" height="${H - B - Y_(c)}" rx="2" fill="${above ? 'var(--crit)' : 'var(--eci-navy)'}" fill-opacity="${above ? 0.85 : 0.55}"/>`;
+  });
+  for(let v = 0.3; v <= 0.801; v += 0.1){
+    g += `<text x="${L + (v - lo) / (hi - lo) * (W - L - Rm)}" y="${H - B + 16}" text-anchor="middle">${v.toFixed(1)}</text>`;
+  }
+  const tx = L + (th - lo) / (hi - lo) * (W - L - Rm);
+  g += `<line x1="${tx}" x2="${tx}" y1="${T}" y2="${H - B}" stroke="var(--ink)" stroke-dasharray="4 3" stroke-width="1.6"/><text x="${tx - 6}" y="${T + 8}" text-anchor="end" style="fill:var(--ink);font-weight:700">Cut-off ${th.toFixed(2)}</text>`;
+  g += `<text x="${(L + W - Rm) / 2}" y="${H - 2}" text-anchor="middle" font-weight="700">Isolation Score (Higher = More Isolated)</text>`;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Histogram of anomaly scores">${g}</svg>`;
+}
+
+function turnoutSVG(T){
+  const W = 640, H = 250, L = 42, B = 32, Tp = 16, Rm = 44;
+  const hours = ['7','8','9','10','11','12','13','14','15','16','17','18'];
+  const wts = [0,5,8,9,8,7,6,6,8,10,14,19];
+  let acc = 0;
+  const tot = wts.reduce((a, b) => a + b, 0);
+  const cum = wts.map(w => (acc += w) / tot * T);
+  const ymax = Math.ceil((T + 8) / 10) * 10;
+  const X_ = i => L + i / (hours.length - 1) * (W - L - Rm);
+  const Y_ = v => H - B - v / ymax * (H - B - Tp);
+  let g = '';
+
+  for(let v = 0; v <= ymax; v += ymax / 4){
+    g += `<line class="gl" x1="${L}" x2="${W - Rm}" y1="${Y_(v)}" y2="${Y_(v)}"/><text x="${L - 6}" y="${Y_(v) + 4}" text-anchor="end">${Math.round(v)}%</text>`;
+  }
+  hours.forEach((h, i) => {
+    if(i % 2 === 0 || i === hours.length - 1){
+      g += `<text x="${X_(i)}" y="${H - B + 16}" text-anchor="middle">${h}:00</text>`;
+    }
+  });
+  const line = cum.map((v, i) => `${i ? 'L' : 'M'}${X_(i)} ${Y_(v)}`).join('');
+  g += `<path d="${line}L${X_(11)} ${Y_(0)}L${X_(0)} ${Y_(0)}Z" fill="url(#turnoutGradGov)" fill-opacity="0.25"/>
+        <path d="${line}" fill="none" stroke="var(--eci-navy)" stroke-width="2.6" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="turnoutGradGov" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="var(--eci-navy)" stop-opacity="0.6"/>
+            <stop offset="1" stop-color="var(--eci-navy)" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>`;
+  g += `<circle cx="${X_(11)}" cy="${Y_(T)}" r="5" fill="var(--eci-navy)" stroke="#FFFFFF" stroke-width="2"/><text x="${X_(11) + 9}" y="${Y_(T) + 4}" style="fill:var(--ink);font-weight:700">${T.toFixed(1)}%</text>`;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Turnout over polling hours">${g}</svg>`;
+}
+
+function reasonText(r){
+  const s = r.z > 0 ? '+' : '−';
+  return `${r.f.label.toLowerCase()} ${s}${Math.abs(r.z).toFixed(1)}σ`;
+}
+function logItem(e){
+  return `<div class="item">
+    <span class="dot ${e.k}"></span>
+    <span class="grow"><div class="t">${e.m}</div><div class="s">${e.s}</div></span>
+    <span class="mono s" style="color:var(--ink-3);font-size:12px">${e.t}</span>
+  </div>`;
+}
+
+/* ---------- VIEW CONTROLLERS (GOVERNMENT ECI STYLE) ---------- */
+const V = {};
+
+/* VIEW 1: OVERVIEW */
+V.overview = function(){
+  const t = totals(), fl = flaggedSet(), turn = t.cast / t.reg * 100, dups = DUP_BASE + state.dupNew;
+  const m = metrics();
+  const top = RANKED.slice(0, 5);
+
+  return `
+  <div class="page-header">
+    <div class="page-title-box">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        चुनाव अवलोकन एवं टेलीमेट्री | General Election Overview
+      </h1>
+
+    </div>
+    <div class="page-actions">
+      ${pill('72 केंद्र सक्रिय / Stations Active', 'good')}
+      ${pill('IForest v2.4 निगरानी चालू', 'acc')}
+      ${pill('मतदान समाप्ति: 18:00 IST', 'info')}
+    </div>
+  </div>
+
+  <!-- 6 Government KPI Cards -->
+  <section class="kpis-6" aria-label="Key Performance Indicators">
+    <div class="kpi-card acc-blue">
+      <div class="kpi-head">
+        <span class="kpi-label">पंजीकृत मतदाता<br><small>Registered Voters</small></span>
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+      </div>
+      <div class="kpi-val num">${IN(t.reg)}</div>
+      <div class="kpi-trend neutral"><span>↑</span> +4.2% vs 2021 अंतिम नामावली</div>
+    </div>
+
+    <div class="kpi-card acc-emerald">
+      <div class="kpi-head">
+        <span class="kpi-label">डाले गए मत<br><small>Total Votes Cast</small></span>
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+      </div>
+      <div class="kpi-val num">${IN(t.cast)}</div>
+      <div class="kpi-trend up"><span>↑</span> ${turn.toFixed(1)}% कुल मतदान प्रतिशत</div>
+    </div>
+
+    <div class="kpi-card acc-amber">
+      <div class="kpi-head">
+        <span class="kpi-label">फर्जी मत अवरोध<br><small>Duplicates Blocked</small></span>
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+        </div>
+      </div>
+      <div class="kpi-val num">${dups}</div>
+      <div class="kpi-trend up"><span>🛡️</span> 100% क्रिप्टो सुरक्षा अवरोध</div>
+    </div>
+
+    <div class="kpi-card acc-rose">
+      <div class="kpi-head">
+        <span class="kpi-label">चिह्नित केंद्र<br><small>Flagged Stations</small></span>
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        </div>
+      </div>
+      <div class="kpi-val num">${fl.size}<small> of ${N}</small></div>
+      <div class="kpi-trend down"><span>⚠</span> ${openCount()} समीक्षाधीन केंद्र</div>
+    </div>
+
+    <div class="kpi-card acc-indigo">
+      <div class="kpi-head">
+        <span class="kpi-label">मॉडल विश्वसनीयता<br><small>ML Model F1-Score</small></span>
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+      </div>
+      <div class="kpi-val num">${m.f.toFixed(2)}</div>
+      <div class="kpi-trend up"><span>🎯</span> ${(m.p * 100).toFixed(0)}% परिशुद्धता (Precision)</div>
+    </div>
+
+    <div class="kpi-card acc-purple">
+      <div class="kpi-head">
+        <span class="kpi-label">पहचान दर<br><small>Anomaly Detection Rate</small></span>
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+      </div>
+      <div class="kpi-val num">${(m.r * 100).toFixed(0)}%</div>
+      <div class="kpi-trend up"><span>✓</span> ${m.tp} / ${m.truthN} विसंगतियां पकड़ी गईं</div>
+    </div>
+  </section>
+
+  <!-- Live Polling Station Status Map -->
+  <section class="panel">
+    <header>
+      <h2>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+        मतदान केंद्र स्थिति ग्रिड / Live Polling Station Surveillance Map (72 Stations)
+      </h2>
+      <span class="sub">Click any station node to open administrative review drawer</span>
+    </header>
+    <div class="body">
+      ${renderLiveElectionMap()}
+    </div>
+  </section>
+
+  <!-- Candidate Breakdown & Priority Review -->
+  <div class="grid2">
+    <section class="panel">
+      <header>
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          प्रत्याशीवार मत गणना / Votes Counted by Candidate
+        </h2>
+        <span class="sub">${IN(t.valid)} कुल मान्य मत गिने गए</span>
+      </header>
+      <div class="body bars">
+        ${CANDS.map((c, i) => {
+          const sh = t.votes[i] / t.valid * 100;
+          return `
+          <div class="crow">
+            <div class="top">
+              <div class="cand-lead">
+                <div class="cand-avatar" style="background:${c.color}">${c.name[0]}</div>
+                <div>
+                  <div class="nm">${c.name}</div>
+                  <div class="pt">${c.party}</div>
+                </div>
+              </div>
+              <span class="num"><b>${IN(t.votes[i])}</b> <span class="pt" style="font-weight:700">(${sh.toFixed(1)}%)</span></span>
+            </div>
+            <div class="track">
+              <div class="fill" style="width:${sh}%;background:${c.color}"></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          प्राथमिकता समीक्षा केंद्र / High-Priority Stations to Review
+        </h2>
+        <button class="btn" data-go="anomalies" style="padding:3px 8px;font-size:11.5px">सभी देखें / View All</button>
+      </header>
+      <div class="list">
+        ${top.map(s => `
+        <button class="item" data-open="${s.id}">
+          <span class="grow">
+            <div class="t">${s.id} · ${s.name}</div>
+            <div class="s">${s.reasons.length ? s.reasons.map(r => reasonText(r)).join('; ') : 'Combined multi-feature outlier'}</div>
+          </span>
+          ${state.status[s.id] ? pill(STATUS[state.status[s.id]][0], STATUS[state.status[s.id]][1]) : pill('Unreviewed (लंबित)', 'crit')}
+          <span class="num" style="font-weight:700;font-size:13.5px;color:var(--crit)">${s.score.toFixed(3)}</span>
+        </button>`).join('')}
+      </div>
+    </section>
+  </div>
+
+  <!-- Turnout Curve & Timeline -->
+  <div class="grid2">
+    <section class="panel">
+      <header>
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          घंटेवार मतदान रुझान / Cumulative Turnout Across Polling Hours
+        </h2>
+        <span class="sub">07:00 to 18:00 IST (Hourly Telemetry)</span>
+      </header>
+      <div class="body">
+        ${turnoutSVG(turn)}
+      </div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+          संदिग्ध घटनाक्रम टाइमलाइन / Suspicious Activity Timeline
+        </h2>
+        <button class="btn" data-go="suspicious" style="padding:3px 8px;font-size:11.5px">सभी अलर्ट / All Alerts</button>
+      </header>
+      <div class="list">
+        ${state.alerts.slice(0, 4).map(a => `
+        <div class="timeline-item">
+          <div class="timeline-icon ${a.severity.toLowerCase()}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          </div>
+          <div class="grow">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span class="t">${a.title}</span>
+              <span class="mono" style="font-size:11px;color:var(--ink-3)">${a.time}</span>
+            </div>
+            <div class="s">${a.desc}</div>
+            <div style="margin-top:4px">
+              <button class="idbtn" data-open="${a.stationId}" style="font-size:11px">Inspect ${a.stationId} →</button>
+            </div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </section>
+  </div>`;
+};
+
+/* VIEW 2: ANOMALY MONITOR */
+V.anomalies = function(){
+  const fl = flaggedSet();
+  const flagCount = fl.size;
+  let threatLevel = 'LOW', threatCls = 'level-low', threatText = 'सामान्य आधारभूत सीमा। कोई प्रणालीगत चुनावी गड़बड़ी नहीं मिली (Nominal baseline variance. No systemic election compromise detected).';
+  if(flagCount >= 10){
+    threatLevel = 'HIGH';
+    threatCls = 'level-high';
+    threatText = 'गंभीर सांख्यिकीय विचलन। तत्काल प्रशासनिक सत्यापन एवं फ्लाइंग स्क्वाड जांच अनिवार्य (Urgent administrative verification required).';
+  } else if(flagCount >= 6){
+    threatText = 'मध्यम स्तर की विसंगति। ग्रामीण एवं अर्ध-शहरी मतदान केंद्रों की समीक्षा जारी रखें (Elevated outlier concentration detected).';
+    threatLevel = 'MODERATE';
+    threatCls = 'level-medium';
+  }
+
+  return `
+  <div class="page-header">
+    <div class="page-title-box">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l5-5"/>
+        </svg>
+        एआई विसंगति निगरानी प्रणाली | AI Anomaly Surveillance Monitor
+      </h1>
+      <p>Isolation Forest algorithm evaluating 72 polling stations across 5 multidimensional features (Liu, Ting, Zhou 2008).</p>
+    </div>
+    <div class="page-actions">
+      ${pill(TREES + ' Trees · ψ=' + PSI, 'acc')}
+      ${pill(flagCount + ' चिह्नित केंद्र / Flagged', flagCount > 8 ? 'crit' : 'warn')}
+    </div>
+  </div>
+
+  <!-- Dynamic Threat Level Banner -->
+  <div class="threat-banner ${threatCls}">
+    <div class="threat-meta">
+      <div class="threat-shield-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M12 2L3 7V12C3 17.5 7 21.6 12 22C17 21.6 21 17.5 21 12V7L12 2Z"/>
+        </svg>
+      </div>
+      <div class="threat-info">
+        <h3>राष्ट्रीय सुरक्षा स्तर: THREAT LEVEL ${threatLevel}</h3>
+        <p>${threatText}</p>
+      </div>
+    </div>
+    <div>
+      <span class="pill ${threatLevel === 'HIGH' ? 'crit' : threatLevel === 'MODERATE' ? 'warn' : 'good'}" style="font-weight:700">
+        ${threatLevel === 'HIGH' ? 'CRITICAL WATCH (अतिसंवेदनशील)' : threatLevel === 'MODERATE' ? 'ELEVATED MONITOR (सजग निगरानी)' : 'ALL CLEAR (सामान्य)'}
+      </span>
+    </div>
+  </div>
+
+  ${flagCount > 0 ? `
+  <div class="alert-marquee">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>सक्रिय सतर्कता सूचना: ${flagCount} मतदान केंद्र सांख्यिकीय सीमा से अधिक विचलित हैं। समीक्षा निर्णय अपरिवर्तनीय ऑडिट लॉग में दर्ज किए जाते हैं।</span>
+  </div>` : ''}
+
+  <!-- Contamination Parameter & Model Metrics -->
+  <section class="panel">
+    <div class="body slider">
+      <label for="contam">समीक्षा संदूषण सीमा (Contamination Threshold):</label>
+      <input type="range" id="contam" min="2" max="25" step="1" value="${state.contam}" aria-describedby="contamnote">
+      <span class="num" id="contamval" style="font-weight:700;font-size:15px;color:var(--eci-navy)"></span>
+      <span id="contamnote" style="color:var(--ink-3);font-size:12px">(शीर्ष प्रतिशत जिन्हें जांच हेतु चिह्नित किया गया है)</span>
+    </div>
+    <div class="metrics" id="metrics" style="border-top:1px solid var(--border-light)"></div>
+  </section>
+
+  <!-- Interactive Plots -->
+  <div class="grid2">
+    <section class="panel">
+      <header>
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/></svg>
+          मतदान प्रतिशत बनाम अस्वीकृत मत (Turnout vs Rejected)
+        </h2>
+        <div class="legend">
+          <span><i style="background:var(--eci-navy);opacity:.55"></i> सामान्य (Nominal)</span>
+          <span><i style="background:var(--crit)"></i> चिह्नित (Flagged)</span>
+        </div>
+      </header>
+      <div class="body plot" id="plot1"></div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          आइसोलेशन स्कोर वितरण (Score Distribution)
+        </h2>
+      </header>
+      <div class="body" id="plot2"></div>
+    </section>
+  </div>
+
+  <!-- Real-time ML Feed -->
+  <section class="panel">
+    <header>
+      <h2>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        रियल-टाइम एआई डिटेक्शन फीड (Real-Time ML Feed)
+      </h2>
+      <span class="sub">Latest algorithmic detections</span>
+    </header>
+    <div class="list">
+      ${RANKED.slice(0, 3).map(s => `
+      <div class="item">
+        <span class="dot dup"></span>
+        <span class="grow">
+          <div class="t">High Anomaly Isolation: <b>${s.id} (${s.name})</b></div>
+          <div class="s">Score ${s.score.toFixed(3)} · Primary factors: ${s.reasons.map(reasonText).join(', ') || 'Multivariate deviation'}</div>
+        </span>
+        <button class="btn" data-open="${s.id}" style="padding:3px 9px;font-size:11.5px">जांच करें / Investigate</button>
+      </div>`).join('')}
+    </div>
+  </section>
+
+  <!-- Detailed Station Table -->
+  <section class="panel">
+    <header>
+      <h2>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+        मतदान केंद्र निगरानी आव्यूह (Polling Station Surveillance Matrix)
+      </h2>
+      <div class="chips" id="chips" role="group" aria-label="Filter stations"></div>
+    </header>
+    <div class="tablewrap">
+      <table>
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>`;
+};
+
+function updateAnom(){
+  const m = metrics(), pc = x => (x * 100).toFixed(0) + '%';
+  const cv = document.getElementById('contamval');
+  if(cv) cv.textContent = state.contam + '% · ' + m.fl.size + ' stations';
+
+  const me = document.getElementById('metrics');
+  if(me){
+    me.innerHTML = `
+      <div><div class="l">मॉडल परिशुद्धता (Precision)</div><div class="v num">${pc(m.p)}</div></div>
+      <div><div class="l">मॉडल रिकॉल (Recall)</div><div class="v num">${pc(m.r)}</div></div>
+      <div><div class="l">F1-स्कोर (F1-Score)</div><div class="v num">${m.f.toFixed(2)}</div></div>
+      <div><div class="l">पहचानी गई विसंगतियां (Seeded Found)</div><div class="v num">${m.tp}<small style="font:500 13px var(--font-main);color:var(--ink-3)"> of ${m.truthN}</small></div></div>`;
+  }
+
+  const p1 = document.getElementById('plot1');
+  if(p1) p1.innerHTML = scatterSVG() + '<div class="tip" id="tip" hidden></div>';
+
+  const p2 = document.getElementById('plot2');
+  if(p2) p2.innerHTML = histSVG() + `<p class="note" style="margin-top:12px">Evaluated against ${m.truthN} synthetic ground-truth anomalies embedded during precinct initialization.</p>`;
+
+  const cols = [
+    ['id', 'Station ID'],
+    ['region', 'Region (क्षेत्र)'],
+    ['turnout', 'Turnout (मतदान %)'],
+    ['reject', 'Rejected (अस्वीकृत %)'],
+    ['score', 'Anomaly Score'],
+    ['conf', 'Risk Level'],
+    ['sig', 'Primary Signal'],
+    ['st', 'Review Status']
+  ];
+
+  const th = document.getElementById('thead');
+  if(th){
+    th.innerHTML = cols.map(([k, l]) => {
+      const can = ['id', 'region', 'turnout', 'reject', 'score'].includes(k);
+      return `<th scope="col" ${state.sortK === k ? `aria-sort="${state.sortD > 0 ? 'ascending' : 'descending'}"` : ''}>
+        ${can ? `<button data-sort="${k}">${l}${state.sortK === k ? (state.sortD > 0 ? ' ↑' : ' ↓') : ''}</button>` : l}
+      </th>`;
+    }).join('');
+  }
+
+  const F = [
+    ['flagged', 'Flagged (' + m.fl.size + ')'],
+    ['all', 'All Stations (' + N + ')'],
+    ['review', 'Under Review'],
+    ['escalated', 'Escalated'],
+    ['cleared', 'Cleared']
+  ];
+
+  const ch = document.getElementById('chips');
+  if(ch){
+    ch.innerHTML = F.map(([k, l]) => `<button class="chip" data-filter="${k}" aria-pressed="${state.filter === k}">${l}</button>`).join('');
+  }
+
+  let rows = STATIONS.filter(s => {
+    if(state.filter === 'all') return true;
+    if(state.filter === 'flagged') return m.fl.has(s.id);
+    return state.status[s.id] === state.filter;
+  });
+
+  const k = state.sortK, d = state.sortD;
+  rows.sort((a, b) => (typeof a[k] === 'string' ? a[k].localeCompare(b[k]) : a[k] - b[k]) * d);
+
+  const tb = document.getElementById('tbody');
+  if(tb){
+    tb.innerHTML = rows.length ? rows.map(s => {
+      const f = m.fl.has(s.id), st = state.status[s.id];
+      const isEscalated = st === 'escalated';
+      const riskPercent = Math.min(100, Math.round(s.score * 130));
+      const riskColor = s.score > 0.6 ? 'var(--crit)' : s.score > 0.5 ? 'var(--warn)' : 'var(--good)';
+
+      return `
+      <tr class="${f ? 'flag' : ''} ${isEscalated ? 'escalated-row' : ''}">
+        <td>
+          <button class="idbtn" data-open="${s.id}">${s.id}</button>
+          <div class="sub">${s.name}</div>
+        </td>
+        <td>${s.region}</td>
+        <td class="num">${s.turnout.toFixed(1)}%</td>
+        <td class="num">${s.reject.toFixed(1)}%</td>
+        <td>
+          <span class="num" style="font-weight:700">${s.score.toFixed(3)}</span>
+        </td>
+        <td>
+          <div class="conf-bar">
+            <div class="conf-track">
+              <div class="conf-fill" style="width:${riskPercent}%;background:${riskColor}"></div>
+            </div>
+            <span class="num" style="font-size:11.5px;color:var(--ink-2)">${riskPercent}%</span>
+          </div>
+        </td>
+        <td style="max-width:220px">
+          ${s.reasons.length ? s.reasons.map(reasonText).join('<br>') : '<span class="sub">Nominal variance</span>'}
+        </td>
+        <td>
+          ${st ? pill(STATUS[st][0], STATUS[st][1]) : (f ? pill('Needs Review', 'crit') : '<span class="sub">Nominal</span>')}
+        </td>
+      </tr>`;
+    }).join('') : `
+    <tr>
+      <td colspan="8" style="padding:36px;text-align:center;color:var(--ink-3)">
+        No stations match the selected filter.
+      </td>
+    </tr>`;
+  }
+}
+
+/* VIEW 3: SUSPICIOUS ACTIVITY */
+V.suspicious = function(){
+  const alerts = state.alerts;
+  const critCount = alerts.filter(a => a.severity === 'CRITICAL').length;
+  const highCount = alerts.filter(a => a.severity === 'HIGH').length;
+  const medCount = alerts.filter(a => a.severity === 'MEDIUM').length;
+  const lowCount = alerts.filter(a => a.severity === 'LOW').length;
+  const unackCount = alerts.filter(a => !a.ack).length;
+
+  let filtered = alerts.filter(a => {
+    if(state.alertFilter === 'all') return true;
+    if(state.alertFilter === 'unack') return !a.ack;
+    return a.severity.toLowerCase() === state.alertFilter;
+  });
+
+  return `
+  <div class="page-header">
+    <div class="page-title-box">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        संदिग्ध गतिविधि नियंत्रण कक्ष | Suspicious Activity Center
+      </h1>
+      <p>Automated security event triage, duplicate voting intercepts, and statistical risk flags.</p>
+    </div>
+    <div class="page-actions">
+      ${pill(alerts.length + ' Total Alerts', 'acc')}
+      ${pill(unackCount + ' Unacknowledged (लंबित)', unackCount > 0 ? 'crit' : 'good')}
+    </div>
+  </div>
+
+  <section class="kpis-6">
+    <div class="kpi-card acc-blue">
+      <div class="kpi-head"><span class="kpi-label">कुल अलर्ट<br><small>Total Alerts</small></span><div class="kpi-icon">📢</div></div>
+      <div class="kpi-val num">${alerts.length}</div>
+      <div class="kpi-trend neutral">All precincts</div>
+    </div>
+    <div class="kpi-card acc-rose">
+      <div class="kpi-head"><span class="kpi-label">अतिसंवेदनशील<br><small>Critical Alerts</small></span><div class="kpi-icon">🚨</div></div>
+      <div class="kpi-val num" style="color:var(--crit)">${critCount}</div>
+      <div class="kpi-trend down">Requires escalation</div>
+    </div>
+    <div class="kpi-card acc-amber">
+      <div class="kpi-head"><span class="kpi-label">उच्च गंभीरता<br><small>High Severity</small></span><div class="kpi-icon">⚠️</div></div>
+      <div class="kpi-val num" style="color:var(--warn)">${highCount}</div>
+      <div class="kpi-trend down">Review immediately</div>
+    </div>
+    <div class="kpi-card acc-indigo">
+      <div class="kpi-head"><span class="kpi-label">मध्यम<br><small>Medium Risk</small></span><div class="kpi-icon">🔍</div></div>
+      <div class="kpi-val num">${medCount}</div>
+      <div class="kpi-trend neutral">Active watchlist</div>
+    </div>
+    <div class="kpi-card acc-emerald">
+      <div class="kpi-head"><span class="kpi-label">सूचनात्मक<br><small>Informational</small></span><div class="kpi-icon">ℹ️</div></div>
+      <div class="kpi-val num">${lowCount}</div>
+      <div class="kpi-trend up">Telemetry verified</div>
+    </div>
+    <div class="kpi-card acc-purple">
+      <div class="kpi-head"><span class="kpi-label">लंबित निस्तारण<br><small>Pending Triage</small></span><div class="kpi-icon">⏳</div></div>
+      <div class="kpi-val num">${unackCount}</div>
+      <div class="kpi-trend down">Unacknowledged</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <header>
+      <h2>अलर्ट एवं घटना नियंत्रण (Incident Feed &amp; Action Dispatch)</h2>
+      <div class="chips">
+        ${[
+          ['all', 'All (' + alerts.length + ')'],
+          ['unack', 'Unacknowledged (' + unackCount + ')'],
+          ['critical', 'Critical (' + critCount + ')'],
+          ['high', 'High (' + highCount + ')'],
+          ['medium', 'Medium (' + medCount + ')'],
+          ['low', 'Low (' + lowCount + ')']
+        ].map(([k, l]) => `
+          <button class="chip" data-alertfilter="${k}" aria-pressed="${state.alertFilter === k}">${l}</button>
+        `).join('')}
+      </div>
+    </header>
+
+    <div class="body" style="display:flex;flex-direction:column;gap:12px">
+      ${filtered.length ? filtered.map(a => `
+      <div class="alert-card ${a.severity.toLowerCase()} ${a.ack ? 'acknowledged' : ''}">
+        <div class="alert-top">
+          <div class="alert-title-row">
+            <div class="alert-icon-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+            </div>
+            <div>
+              <div class="alert-title">${a.title}</div>
+              <div style="font-size:11.5px;color:var(--ink-3);font-family:var(--font-mono)">Incident ID: ${a.id} · Logged at ${a.time} IST</div>
+            </div>
+          </div>
+          <span class="pill ${a.severity === 'CRITICAL' ? 'crit' : a.severity === 'HIGH' ? 'warn' : a.severity === 'MEDIUM' ? 'info' : 'good'}">
+            ${a.severity}
+          </span>
+        </div>
+        <div class="alert-desc">${a.desc}</div>
+        <div class="alert-foot">
+          <span class="alert-station">Precinct: <button class="idbtn" data-open="${a.stationId}">${a.stationId}</button></span>
+          <div class="btnrow">
+            <button class="btn" data-open="${a.stationId}" style="padding:4px 10px;font-size:11.5px">जांच करें / Investigate</button>
+            <button class="btn ${a.ack ? '' : 'primary'}" data-toggleack="${a.id}" style="padding:4px 10px;font-size:11.5px">
+              ${a.ack ? 'Mark Unacknowledged' : 'Acknowledge Alert (स्वीकार करें)'}
+            </button>
+          </div>
+        </div>
+      </div>`).join('') : `
+      <div style="text-align:center;padding:48px 20px;color:var(--ink-3)">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--good)" stroke-width="1.5" style="margin-bottom:12px"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        <h3 style="font-size:18px;color:var(--eci-navy)">कोई सक्रिय संदिग्ध गतिविधि नहीं मिली</h3>
+        <p style="font-size:13px;margin-top:4px">All alerts under this filter have been acknowledged or resolved.</p>
+      </div>`}
+    </div>
+  </section>`;
+};
+
+/* VIEW 4: FAIRNESS ANALYSIS */
+V.fairness = function(){
+  const fl = flaggedSet();
+  const G = REGIONS.map(r => {
+    const g = STATIONS.filter(s => s.region === r);
+    const tr = g.filter(s => s.truth), neg = g.filter(s => !s.truth);
+    const fg = g.filter(s => fl.has(s.id));
+    const tp = tr.filter(s => fl.has(s.id)).length;
+    const fp = neg.filter(s => fl.has(s.id)).length;
+    return {
+      r, n: g.length,
+      flag: fg.length / g.length,
+      fpr: neg.length ? fp / neg.length : 0,
+      tpr: tr.length ? tp / tr.length : null,
+      tn: tr.length, fp, negN: neg.length, tp, fg: fg.length
+    };
+  });
+
+  const rates = G.map(g => g.flag), ratio = Math.max(...rates) ? Math.min(...rates) / Math.max(...rates) : 1;
+  const fprs = G.map(g => g.fpr), gap = (Math.max(...fprs) - Math.min(...fprs)) * 100;
+  const ok = ratio >= 0.8;
+  const hi = G.reduce((a, b) => b.flag > a.flag ? b : a);
+  const lo = G.reduce((a, b) => b.flag < a.flag ? b : a);
+
+  const bar = (l, v, col, sub) => `
+  <div class="mrow" style="display:flex;flex-direction:column;gap:4px">
+    <div class="top" style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2)">
+      <span>${l}</span>
+      <span class="num"><b>${v === null ? 'n/a' : (v * 100).toFixed(0) + '%'}</b> <span style="color:var(--ink-3)">${sub}</span></span>
+    </div>
+    <div class="track" style="height:7px;background:#E2E8F0;border-radius:3px;overflow:hidden">
+      <div class="fill" style="height:100%;border-radius:3px;width:${v === null ? 0 : v * 100}%;background:${col}"></div>
+    </div>
+  </div>`;
+
+  return `
+  <div class="page-header">
+    <div class="page-title-box">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v18M6 21h12M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0L5 7ZM19 7l-3 7a3.5 3.5 0 0 0 6 0l-3-7Z"/>
+        </svg>
+        एल्गोरिद्मिक निष्पक्षता एवं समता | Fairness &amp; Parity Analysis
+      </h1>
+      <p>Assessing model equity across urban, semi-urban, and rural precincts. Evaluates disparate impact guidelines (EEOC 80% four-fifths rule).</p>
+    </div>
+    <div class="page-actions">
+      <button class="btn primary" data-go="anomalies">समायोजन सीमा (${state.contam}%)</button>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="body" style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:1;min-width:280px">
+        <h2 style="font-size:18px;font-weight:700;color:var(--eci-navy)">
+          ${ok ? 'समानता मानक प्रमाणित: मॉडल सभी क्षेत्रों में निष्पक्ष है' : 'समानता सतर्कता: विभिन्न क्षेत्रों में भिन्न ध्वजारोहण दर'}
+        </h2>
+        <p style="color:var(--ink-2);margin-top:6px;max-width:72ch;line-height:1.6">
+          <b>${hi.r}</b> stations are flagged at ${(hi.flag * 100).toFixed(0)}%, compared to <b>${lo.r}</b> at ${(lo.flag * 100).toFixed(0)}%. The lowest rate is ${(ratio * 100).toFixed(0)}% of the highest (EEOC guideline threshold: 80%). False-positive rate spread is ${gap.toFixed(1)} percentage points.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+        ${pill(ok ? 'Complies with 80% Rule (मानक प्रमाणित)' : 'Disparity Alert (< 80%)', ok ? 'good' : 'warn')}
+        ${pill('Parity Ratio: ' + ratio.toFixed(2), 'acc')}
+      </div>
+    </div>
+  </section>
+
+  <div class="grid3">
+    ${G.map(g => `
+    <section class="panel">
+      <header>
+        <h3>${g.r} Precincts (मतदान केंद्र)</h3>
+        <span class="sub">${g.n} stations</span>
+      </header>
+      <div class="body" style="display:flex;flex-direction:column;gap:14px">
+        ${bar('Flag Rate (चिह्नित दर)', g.flag, 'var(--eci-navy)', g.fg + ' of ' + g.n)}
+        ${bar('False-Positive Rate', g.fpr, 'var(--warn)', g.fp + ' of ' + g.negN + ' nominal')}
+        ${bar('Detection Rate (पहचान दर)', g.tpr, 'var(--good)', g.tn ? g.tp + ' of ' + g.tn + ' seeded' : 'none seeded')}
+      </div>
+    </section>`).join('')}
+  </div>
+
+  <p class="note">
+    <b>FairVote AI निष्पक्षता निर्देशिका:</b> Precinct demographic distributions naturally reflect distinct physical realities: rural stations feature later evening voting peaks due to agrarian shift patterns. The algorithm does not confuse late surges with illicit ballot stuffing.
+  </p>`;
+};
+
+/* VIEW 5: AUDIT LOG */
+V.audit = function(){
+  return `
+  <div class="page-header">
+    <div class="page-title-box">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r=".9"/><circle cx="3.5" cy="12" r=".9"/><circle cx="3.5" cy="18" r=".9"/>
+        </svg>
+        अपरिवर्तनीय चुनाव ऑडिट ट्रेल | Cryptographic Audit Trail
+      </h1>
+      <p>Cryptographic ledger recording every vote cast, duplicate ballot prevented, ML execution run, and human reviewer adjudication.</p>
+    </div>
+    <div class="page-actions">
+      ${pill('SHA-256 Validated', 'good')}
+      ${pill('Tamper-Resistant Ledger', 'acc')}
+    </div>
+  </div>
+
+  <section class="panel">
+    <header>
+      <div class="chips" id="lchips" role="group" aria-label="Filter events"></div>
+      <span class="sub" id="lcount"></span>
+    </header>
+    <div class="list" id="llist"></div>
+  </section>`;
+};
+
+let logFilter = 'all';
+function updateLog(){
+  const F = [
+    ['all', 'All Events (समस्त रिकॉर्ड)'],
+    ['vote', 'Ballots Cast (डाले गए मत)'],
+    ['dup', 'Duplicate Blocks (फर्जी प्रयास)'],
+    ['review', 'Reviewer Decisions (अधिकारी निर्णय)'],
+    ['system', 'System Telemetry (सिस्टम टेलीमेट्री)']
+  ];
+  const lc = document.getElementById('lchips');
+  if(lc) lc.innerHTML = F.map(([k, l]) => `<button class="chip" data-lf="${k}" aria-pressed="${logFilter === k}">${l}</button>`).join('');
+
+  const rows = state.log.filter(e => logFilter === 'all' || e.k === logFilter);
+  const cnt = document.getElementById('lcount');
+  if(cnt) cnt.textContent = rows.length + ' Recorded Events';
+
+  const ll = document.getElementById('llist');
+  if(ll){
+    ll.innerHTML = rows.length ? rows.map(logItem).join('') : '<div class="item"><span class="s">No events match this filter category.</span></div>';
+  }
+}
+
+/* VIEW 6: VOTER PORTAL */
+V.voter = function(){
+  const v = state.voter;
+  const steps = ['1. Authentication (प्रमाणीकरण)', '2. Candidate Ballot (मतपत्र)', '3. Confirmation (पुष्टि)', '4. Digital Receipt (पावती)'];
+  const cur = { login: 0, blocked: 0, ballot: 1, confirm: 2, receipt: 3 }[v.step];
+  let body = '';
+
+  if(v.step === 'login' || v.step === 'blocked'){
+    body = `
+    <form id="loginform" class="body" style="display:flex;flex-direction:column;gap:16px" novalidate>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;color:var(--eci-navy)">राष्ट्रीय मतदाता पहचान एवं प्रमाणीकरण</h2>
+        <p style="color:var(--ink-2);margin-top:2px">Ward Council General Election 2026 · ECI Secure Digital Ballot Console</p>
+      </div>
+
+      <div class="field">
+        <label for="vid">राष्ट्रीय मतदाता पहचान पत्र संख्या / Voter National ID (VTR)</label>
+        <input type="text" id="vid" autocomplete="off" value="${v.id}" placeholder="VTR-2026-004217">
+      </div>
+
+      <div class="field">
+        <label for="pw">6-अंकीय गोपनीय सुरक्षा पिन / 6-Digit Secure Passcode</label>
+        <input type="password" id="pw" value="482913" autocomplete="off" inputmode="numeric" aria-describedby="loginerr">
+      </div>
+
+      <div class="err" id="loginerr" role="alert">${v.err}</div>
+
+      <div class="btnrow">
+        <button class="btn primary" type="submit" style="padding:10px 22px;font-size:13.5px">
+          प्रमाणित करें एवं मतपत्र खोलें (Authenticate &amp; Vote)
+        </button>
+      </div>
+
+      <div class="demo-ids">
+        <span>परीक्षण हेतु नमूना पहचान पत्र (Demo Credentials):</span>
+        <button type="button" data-fill="VTR-2026-004217">VTR-2026-004217 (Ready to Vote)</button>
+        <button type="button" data-fill="VTR-2026-000118">VTR-2026-000118 (Already Voted)</button>
+      </div>
+    </form>`;
+  } else if(v.step === 'ballot'){
+    body = `
+    <div class="body" style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;color:var(--eci-navy)">कृपया अपने प्रत्याशी का चयन करें (Select Candidate)</h2>
+        <p style="color:var(--ink-2);margin-top:2px">Authenticated as ${mask(v.id)}. Your ballot remains 100% confidential under zero-knowledge encryption.</p>
+      </div>
+
+      <div role="radiogroup" aria-label="Candidates" style="display:flex;flex-direction:column;gap:10px">
+        ${CANDS.map((c, i) => `
+        <label class="cand">
+          <input type="radio" name="cand" value="${i}" ${v.choice === i ? 'checked' : ''}>
+          <span class="sym" style="background:${c.color}">${c.name[0]}</span>
+          <span class="grow">
+            <b>${c.name}</b>
+            <small>${c.party}</small>
+          </span>
+        </label>`).join('')}
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" data-act="review" ${v.choice === null ? 'disabled' : ''} id="reviewbtn" style="padding:9px 18px">
+          सत्यापन हेतु आगे बढ़ें (Review Choice)
+        </button>
+        <button class="btn" data-act="signout">लॉगआउट (Sign Out)</button>
+      </div>
+    </div>`;
+  } else if(v.step === 'confirm'){
+    const c = CANDS[v.choice];
+    body = `
+    <div class="body" style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;color:var(--eci-navy)">मत पुष्टि एवं अंतिम सीलिंग (Confirm Official Vote)</h2>
+        <p style="color:var(--ink-2);margin-top:2px">Once cast, your ballot is cryptographically sealed and cannot be altered or double-cast.</p>
+      </div>
+
+      <div class="cand" style="cursor:default;box-shadow:0 0 0 2px var(--eci-navy)">
+        <span class="sym" style="background:${c.color}">${c.name[0]}</span>
+        <span class="grow">
+          <b>${c.name}</b>
+          <small>${c.party}</small>
+        </span>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" data-act="cast" style="padding:10px 24px;font-size:14px">मतपत्र सील करें (Cast Sealed Ballot)</button>
+        <button class="btn" data-act="back">प्रत्याशी बदलें (Change Selection)</button>
+      </div>
+    </div>`;
+  } else {
+    const confettiHTML = Array(35).fill(0).map((_, i) => {
+      const left = Math.random() * 100;
+      const delay = Math.random() * 2;
+      const color = ['#FF6600', '#003580', '#138808', '#D4AF37', '#673AB7'][i % 5];
+      return `<div class="confetti-piece" style="left:${left}%;animation-delay:${delay}s;background:${color}"></div>`;
+    }).join('');
+
+    body = `
+    <div class="body" style="display:flex;flex-direction:column;gap:16px;position:relative">
+      <div class="confetti-container">${confettiHTML}</div>
+      <div>
+        <h2 style="font-size:20px;font-weight:800;color:var(--good)">✓ आपका मत सफलतापूर्वक दर्ज एवं सील कर दिया गया है</h2>
+        <p style="color:var(--ink-2);margin-top:2px">Your vote has been cryptographically sealed and counted in official precinct totals.</p>
+      </div>
+
+      <div class="receipt-card">
+        <span class="pill good" style="align-self:flex-start">FairVote AI · डिजिटल मतदान रसीद</span>
+        <div>
+          <div style="font-size:11px;font-family:var(--font-mono);color:var(--ink-3)">CRYPTOGRAPHIC RECEIPT HASH (सत्यापन संदर्भ)</div>
+          <div class="receipt-ref">${v.ref}</div>
+        </div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.6">
+          मतदाता क्रमांक (Voter ID): <b>${mask(v.id)}</b><br>
+          मतदान केंद्र (Precinct): <b>Ward 14 · Polling Station PS-017 Mill Road</b><br>
+          समय टिकट (Timestamp): <b>${nowT()} IST</b>
+        </div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn" data-act="signout">सुरक्षित बाहर निकलें (Sign Out)</button>
+        <button class="btn danger" data-act="tryagain">फर्जी मतदान रोकथाम परीक्षण (Test Duplicate Prevention)</button>
+      </div>
+
+      <p class="note">
+        <b>फर्जी मतदान रोकथाम प्रदर्शन:</b> 'Test Duplicate Prevention' बटन दबाकर देखें कि यदि कोई दोबारा उसी पहचान से मतदान का प्रयास करता है तो FairVote AI उसे कैसे तुरंत रोककर अलर्ट दर्ज करता है।
+      </p>
+    </div>`;
+  }
+
+  return `
+  <div class="page-header">
+    <div class="page-title-box">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 13h16v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7Z"/><path d="M8 13V8l4-5 4 5v5"/><path d="M10 17l1.6 1.6L15 15"/>
+        </svg>
+        सुरक्षित मतदाता सेवा पोर्टल | Official Voter Services Portal
+      </h1>
+      <p>Constituent interface featuring zero-knowledge privacy, verifiable receipts, and instant duplicate interception.</p>
+    </div>
+  </div>
+
+  <div class="grid2" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start">
+    <section class="panel">
+      <header>
+        <div class="stepper-nav">
+          ${steps.map((s, i) => `
+            <div class="stepper-step ${i === cur ? 'active' : i < cur ? 'completed' : ''}">
+              <span>${s}</span>
+            </div>
+          `).join('')}
+        </div>
+      </header>
+      ${body}
+    </section>
+
+    <section class="panel">
+      <header>
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--good)" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          मतदान सुरक्षा गारंटी / How Your Vote is Secured
+        </h2>
+      </header>
+      <div class="body">
+        <ul class="checks">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            <div><b>एक मतदाता - एक मत (Strict One-Person-One-Vote):</b> किसी भी दोहरे प्रयास को तुरंत रोक दिया जाता है तथा डिजिटल साक्ष्य ऑडिट ट्रेल में संरक्षित होता है।</div>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            <div><b>सत्यापनीय डिजिटल पावती (Verifiable Receipt Hash):</b> आपकी पावती यह प्रमाणित करती है कि मत गणना में शामिल है, बिना यह उजागर किए कि आपने किसे वोट दिया।</div>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            <div><b>पूर्ण एंड-टू-एंड ऑडिटिंग (End-to-End Auditing):</b> चुनाव पर्यवेक्षक और राजनीतिक दल स्वतंत्र रूप से ब्लॉकचेन/मर्कल रूट द्वारा कुल मतों का सत्यापन कर सकते हैं।</div>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            <div><b>गोपनीयता संरक्षण (Zero-Knowledge Privacy):</b> मशीन लर्निंग केवल केंद्रवार सांख्यिकी की निगरानी करती है; व्यक्तिगत मत सदैव गुप्त रहता है।</div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>`;
+};
+
+/* ---------- REVIEW DRAWER ---------- */
+function drawer(id){
+  const s = STATIONS.find(x => x.id === id);
+  if(!s) return '';
+  const m = flaggedSet(), f = m.has(id), st = state.status[id];
+
+  const feat = FEATS.map((ft, j) => {
+    const S = STAT[j];
+    const pos = v => (v - S.min) / (S.max - S.min) * 100;
+    const out = Math.abs(s.z[j]) >= 2;
+    return `
+    <div class="feat">
+      <div class="row">
+        <span>${ft.label}</span>
+        <span class="num">
+          <b>${s[ft.k].toFixed(1)}${ft.unit}</b>
+          <span style="color:var(--ink-3)">typical ${S.med.toFixed(1)}</span>
+        </span>
+      </div>
+      <div class="range">
+        <span class="med" style="left:${pos(S.med)}%"></span>
+        <span class="val ${out ? 'out' : ''}" style="left:${pos(s[ft.k])}%"></span>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="drawer-bg" data-close="1"></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle">
+    <header>
+      <div>
+        <div class="mono" style="color:#FFE082;font-size:11.5px">${s.id} · ${s.region} Precinct</div>
+        <h2 id="dtitle">${s.name}</h2>
+      </div>
+      <button class="xbtn" data-close="1" aria-label="Close dialog">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+    </header>
+
+    <div class="dsec">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${f ? pill('Flagged by AI Model', 'crit') : pill('Nominal Baseline')}
+        ${st ? pill(STATUS[st][0], STATUS[st][1]) : ''}
+        ${pill('Risk Rank ' + s.rank + ' of ' + N, 'acc')}
+      </div>
+      <div style="display:flex;gap:28px;flex-wrap:wrap;margin-top:6px">
+        <div>
+          <div class="mono" style="font-size:11px;color:var(--ink-3)">ANOMALY SCORE</div>
+          <div style="font:800 26px var(--font-main);color:var(--crit)">${s.score.toFixed(3)}</div>
+        </div>
+        <div>
+          <div class="mono" style="font-size:11px;color:var(--ink-3)">REGISTERED VOTERS</div>
+          <div style="font:800 26px var(--font-main);color:var(--eci-navy)">${IN(s.reg)}</div>
+        </div>
+      </div>
+      <p style="color:var(--ink-2);line-height:1.5">
+        ${s.reasons.length ? 'प्रमुख विचलन कारक (Drivers): ' + s.reasons.map(reasonText).join(' and ') + '.' : 'No isolated metric exceeds 2σ. Outlier status stems from an anomalous combination of indicators.'}
+      </p>
+    </div>
+
+    <div class="dsec">
+      <h3>Precinct Metrics vs Cohort Distribution</h3>
+      <p style="font-size:11.5px;color:var(--ink-3);margin-top:-4px">Vertical tick = regional median. Red circle = statistical outlier (≥ 2.0σ).</p>
+      ${feat}
+    </div>
+
+    <div class="dsec">
+      <h3>Precinct Candidate Vote Tally</h3>
+      <div class="bars" style="gap:8px">
+        ${CANDS.map((c, i) => `
+        <div class="crow" style="padding:6px 10px">
+          <div class="top">
+            <span style="font-weight:600">${c.name}</span>
+            <span class="num">${IN(s.votes[i])} · ${s.shares[i].toFixed(1)}%</span>
+          </div>
+          <div class="track" style="height:5px">
+            <div class="fill" style="width:${s.shares[i]}%;background:${c.color}"></div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="dsec">
+      <h3>प्रशासनिक निर्णय (Administrative Adjudication)</h3>
+      <div class="btnrow">
+        <button class="btn" data-decide="review" data-id="${id}">समीक्षाधीन (Mark Under Review)</button>
+        <button class="btn danger" data-decide="escalated" data-id="${id}">जांच अग्रेषित (Escalate)</button>
+        <button class="btn success" data-decide="cleared" data-id="${id}">सामान्य घोषित (Clear)</button>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-3);margin-top:4px">Adjudication actions are signed and permanently logged in the audit trail.</p>
+    </div>
+  </aside>`;
+}
+
+function openDrawer(id){
+  state.selected = id;
+  const ov = document.getElementById('overlay');
+  if(ov) ov.innerHTML = drawer(id);
+  const c = ov && ov.querySelector('.xbtn');
+  if(c) c.focus();
+}
+
+function closeDrawer(){
+  state.selected = null;
+  const ov = document.getElementById('overlay');
+  if(ov) ov.innerHTML = '';
+}
+
+/* ---------- BREADCRUMB DYNAMIC UPDATE ---------- */
+const VIEW_NAMES = {
+  overview: 'चुनाव अवलोकन (Election Overview)',
+  anomalies: 'विसंगति निगरानी (Anomaly Monitor)',
+  suspicious: 'संदिग्ध गतिविधि (Suspicious Activity)',
+  fairness: 'निष्पक्षता विश्लेषण (Fairness Analysis)',
+  audit: 'ऑडिट ट्रेल (Audit Trail)',
+  voter: 'मतदाता पोर्टल (Voter Portal)'
+};
+function updateBreadcrumb(){
+  const bc = document.getElementById('breadcrumb-current');
+  if(bc) bc.textContent = VIEW_NAMES[state.view] || state.view;
+}
+
+/* ---------- ROUTING & CORE RENDERING ---------- */
+const VIEWS = ['overview', 'anomalies', 'suspicious', 'fairness', 'audit', 'voter'];
+
+function render(){
+  const viewEl = document.getElementById('view');
+  if(viewEl) viewEl.innerHTML = V[state.view]();
+
+  document.querySelectorAll('.nav').forEach(b => {
+    if(b.getAttribute('data-view') === state.view){
+      b.setAttribute('aria-current', 'page');
+    } else {
+      b.removeAttribute('aria-current');
+    }
+  });
+
+  const bd = document.getElementById('navbadge');
+  const count = openCount();
+  if(bd){
+    bd.textContent = count;
+    bd.hidden = !count;
+  }
+
+  const t = totals();
+  const sc = document.getElementById('sidebar-cast');
+  if(sc) sc.textContent = IN(t.cast);
+  const sf = document.getElementById('sidebar-flagged');
+  if(sf) sf.textContent = flaggedSet().size;
+
+  updateBreadcrumb();
+
+  if(state.view === 'anomalies') updateAnom();
+  if(state.view === 'audit') updateLog();
+}
+
+function go(v){
+  if(!VIEWS.includes(v)) return;
+  state.view = v;
+  if(location.hash !== '#' + v){
+    try { history.replaceState(null, '', '#' + v); } catch(e){ location.hash = v; }
+  }
+  render();
+  window.scrollTo(0, 0);
+}
+
+function themeLabel(){
+  const isContrast = document.documentElement.getAttribute('data-theme') === 'high-contrast';
+  const tl = document.getElementById('themelabel');
+  if(tl) tl.textContent = isContrast ? 'Normal View' : 'High Contrast';
+  return isContrast;
+}
+
+/* ---------- EVENT LISTENERS & DELEGATION ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-view],[data-go],[data-open],[data-close],[data-sort],[data-filter],[data-alertfilter],[data-toggleack],[data-lf],[data-decide],[data-act],[data-fill],[data-fontsize],#themebtn,#lang-btn');
+  if(!t) return;
+
+  if(t.dataset.fontsize){
+    document.documentElement.setAttribute('data-font', t.dataset.fontsize);
+    showToast('अभिगम्यता / Accessibility', `Font size set to ${t.dataset.fontsize.toUpperCase()}`, 'info');
+    return;
+  }
+
+  if(t.id === 'lang-btn'){
+    showToast('भाषा / Language', 'द्विभाषी मोड सक्रिय (Bilingual English / Hindi mode active)', 'info');
+    return;
+  }
+
+  if(t.id === 'themebtn' || t.closest('#themebtn')){
+    const isContrast = document.documentElement.getAttribute('data-theme') === 'high-contrast';
+    if(isContrast){
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'high-contrast');
+    }
+    themeLabel();
+    return;
+  }
+
+  if(t.dataset.view) return go(t.dataset.view);
+  if(t.dataset.go) return go(t.dataset.go);
+  if(t.dataset.open) return openDrawer(t.dataset.open);
+  if(t.dataset.close) return closeDrawer();
+
+  if(t.dataset.sort){
+    const k = t.dataset.sort;
+    if(state.sortK === k) state.sortD *= -1;
+    else {
+      state.sortK = k;
+      state.sortD = (k === 'id' || k === 'region') ? 1 : -1;
+    }
+    return updateAnom();
+  }
+
+  if(t.dataset.filter){
+    state.filter = t.dataset.filter;
+    return updateAnom();
+  }
+
+  if(t.dataset.alertfilter){
+    state.alertFilter = t.dataset.alertfilter;
+    return render();
+  }
+
+  if(t.dataset.toggleack){
+    const aid = t.dataset.toggleack;
+    const alert = state.alerts.find(a => a.id === aid);
+    if(alert){
+      alert.ack = !alert.ack;
+      showToast(alert.ack ? 'Alert Acknowledged' : 'Alert Re-opened', `${alert.id} status updated`, alert.ack ? 'good' : 'warn');
+      addLog('review', `Alert ${aid} ${alert.ack ? 'Acknowledged' : 'Re-opened'}`, alert.title);
+      return render();
+    }
+  }
+
+  if(t.dataset.lf){
+    logFilter = t.dataset.lf;
+    return updateLog();
+  }
+
+  if(t.dataset.decide){
+    const id = t.dataset.id, d = t.dataset.decide;
+    state.status[id] = d;
+    const statusLabel = STATUS[d][0];
+    showToast(`Station ${id} Adjudicated`, `Status marked as ${statusLabel}`, d === 'escalated' ? 'crit' : d === 'cleared' ? 'good' : 'warn');
+    addLog('review', statusLabel + ' · ' + id, 'Administrative decision applied by ECI Returning Officer');
+    openDrawer(id);
+    const bd = document.getElementById('navbadge');
+    if(bd){
+      bd.textContent = openCount();
+      bd.hidden = !openCount();
+    }
+    if(state.view === 'anomalies') updateAnom();
+    else if(state.view === 'overview' || state.view === 'audit'){
+      const y = window.scrollY;
+      render();
+      window.scrollTo(0, y);
+    }
+    return;
+  }
+
+  if(t.dataset.fill){
+    state.voter.id = t.dataset.fill;
+    const vi = document.getElementById('vid');
+    if(vi) vi.value = t.dataset.fill;
+    return;
+  }
+
+  if(t.dataset.act){
+    const v = state.voter;
+    if(t.dataset.act === 'review' && v.choice !== null) v.step = 'confirm';
+    if(t.dataset.act === 'back') v.step = 'ballot';
+    if(t.dataset.act === 'signout'){
+      state.voter = { step: 'login', id: '', choice: null, ref: '', err: '' };
+      showToast('सत्र समाप्त / Signed Out', 'Voter session cleared securely', 'info');
+    }
+    if(t.dataset.act === 'tryagain'){
+      addLog('dup', 'Duplicate vote attempt blocked', mask(v.id) + ' already voted in this election');
+      state.dupNew++;
+      state.voter = {
+        step: 'login',
+        id: v.id,
+        choice: null,
+        ref: '',
+        err: 'Vote already recorded for ' + mask(v.id) + '. Duplicate submission blocked and logged.'
+      };
+      showToast('फर्जी मत अवरुद्ध / Duplicate Blocked', `Credential ${mask(v.id)} already recorded!`, 'crit');
+    }
+    if(t.dataset.act === 'cast'){
+      let h = 2166136261;
+      const str = v.id + v.choice + Date.now();
+      for(const ch of str){
+        h ^= ch.charCodeAt(0);
+        h = Math.imul(h, 16777619);
+      }
+      v.ref = 'FV-' + (h >>> 0).toString(16).toUpperCase().padStart(8, '0');
+      state.voted.add(v.id);
+      state.extra[v.choice]++;
+      addLog('vote', 'Ballot recorded', 'Voter portal · Ward 14 · ' + v.ref);
+      showToast('मत सील हुआ / Ballot Sealed', `Receipt hash ${v.ref} generated`, 'good');
+      v.step = 'receipt';
+    }
+    return render();
+  }
+});
+
+document.addEventListener('change', e => {
+  if(e.target.name === 'cand'){
+    state.voter.choice = +e.target.value;
+    const b = document.getElementById('reviewbtn');
+    if(b) b.disabled = false;
+  }
+});
+
+document.addEventListener('input', e => {
+  if(e.target.id === 'contam'){
+    state.contam = +e.target.value;
+    updateAnom();
+    const bd = document.getElementById('navbadge');
+    if(bd){
+      bd.textContent = openCount();
+      bd.hidden = !openCount();
+    }
+  }
+  if(e.target.id === 'vid'){
+    state.voter.id = e.target.value;
+  }
+});
+
+document.addEventListener('submit', e => {
+  if(e.target.id !== 'loginform') return;
+  e.preventDefault();
+  const id = (document.getElementById('vid').value || '').trim().toUpperCase();
+  const pw = (document.getElementById('pw').value || '').trim();
+  const v = state.voter;
+  v.id = id;
+
+  if(!/^VTR-2026-\d{6}$/.test(id)){
+    v.err = 'मान्य राष्ट्रीय मतदाता पहचान पत्र दर्ज करें (Format: VTR-2026-000000).';
+    return render();
+  }
+  if(!/^\d{6}$/.test(pw)){
+    v.err = 'सुरक्षा पिन 6 अंकों का संख्यात्मक कोड होना चाहिए (Must be 6-digit PIN).';
+    return render();
+  }
+  if(state.voted.has(id)){
+    v.err = 'Vote already recorded for ' + mask(id) + '. दोहरा मतदान विधि अनुसार निषिद्ध है।';
+    addLog('dup', 'Duplicate vote attempt blocked', mask(id) + ' already voted in this election');
+    state.dupNew++;
+    showToast('डुप्लिकेट मत अवरुद्ध', `${mask(id)} already voted`, 'crit');
+    return render();
+  }
+
+  v.err = '';
+  v.step = 'ballot';
+  showToast('प्रमाणीकरण सफल', `स्वागत है मतदाता ${mask(id)}`, 'good');
+  render();
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && state.selected) closeDrawer();
+});
+
+/* Scatter Plot Rich Tooltip */
+document.addEventListener('mousemove', e => {
+  const c = e.target.closest && e.target.closest('circle[data-i]');
+  const tip = document.getElementById('tip');
+  if(!tip) return;
+  if(!c){
+    tip.hidden = true;
+    return;
+  }
+  const s = STATIONS.find(x => x.id === c.dataset.i);
+  const plotBox = document.getElementById('plot1').getBoundingClientRect();
+  tip.hidden = false;
+  tip.style.left = (e.clientX - plotBox.left) + 'px';
+  tip.style.top = (e.clientY - plotBox.top) + 'px';
+  tip.innerHTML = `
+    <b>${s.id}</b> · ${s.name}<br>
+    Region: <b>${s.region}</b><br>
+    Turnout: <b>${s.turnout.toFixed(1)}%</b> · Reject: <b>${s.reject.toFixed(1)}%</b><br>
+    Isolation Score: <b>${s.score.toFixed(3)}</b>
+  `;
+});
+
+/* Real-Time Live Clock */
+function updateClock(){
+  const clockEl = document.getElementById('live-clock');
+  if(clockEl){
+    const d = new Date();
+    clockEl.textContent = d.toLocaleTimeString('en-GB') + ' IST';
+  }
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* Hash & View Initialization */
+window.addEventListener('hashchange', () => {
+  const h = location.hash.slice(1);
+  if(VIEWS.includes(h) && h !== state.view){
+    state.view = h;
+    render();
+  }
+});
+const h0 = location.hash.slice(1);
+if(VIEWS.includes(h0)) state.view = h0;
+
+render();
+themeLabel();
+
+/* Debug & Testing Interface Export */
+window.__fv = { metrics, STATIONS };
+
+})();
+</script>
+</body>
+</html>

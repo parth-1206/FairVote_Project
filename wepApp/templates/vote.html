@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cast Your Vote - FairVote</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .navbar {
+            background: #1f2937;
+            color: white;
+            padding: 18px 40px;
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .election {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .election h2 {
+            margin-bottom: 10px;
+        }
+
+        .candidate-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .candidate {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .candidate:hover {
+            border-color: #2563eb;
+        }
+
+        .candidate input {
+            margin-right: 10px;
+        }
+
+        .candidate-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .party {
+            margin-top: 8px;
+            color: #666;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #2563eb;
+        }
+
+        @media (max-width: 700px) {
+            .candidate-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h1>FairVote</h1>
+    </div>
+
+    <div class="container">
+
+        <div class="election">
+
+            <h2>{{ election.election_name }}</h2>
+
+            <p>
+                Election starts:
+                {{ election.start_date }}
+            </p>
+
+            <p>
+                Election ends:
+                {{ election.end_date }}
+            </p>
+
+            <p>
+                Status:
+                <strong>{{ election.status }}</strong>
+            </p>
+
+        </div>
+
+        <form method="POST" action="/vote">
+
+            <h2>Select Your Candidate</h2>
+
+            <br>
+
+            <div class="candidate-list">
+
+                {% for candidate in candidates %}
+
+                <label class="candidate">
+
+                    <input
+                        type="radio"
+                        name="candidate_id"
+                        value="{{ candidate.candidate_id }}"
+                        required
+                    >
+
+                    <span class="candidate-name">
+                        {{ candidate.candidate_name }}
+                    </span>
+
+                    <div class="party">
+                        Party: {{ candidate.party_name }}
+                    </div>
+
+                </label>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="submit-container">
+
+                <button type="submit">
+                    Cast Vote
+                </button>
+
+                <br>
+
+                <a href="/dashboard" class="back">
+                    ← Back to Dashboard
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

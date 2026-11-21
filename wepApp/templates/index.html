@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FairVote</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 700px;
+            padding: 50px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 5px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+        }
+
+        .btn.register {
+            background: #16a34a;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>FairVote</h1>
+
+        <p>
+            A Fair and Transparent Voting System
+            with Election Anomaly Detection
+        </p>
+
+        <a href="/login" class="btn">
+            Login
+        </a>
+
+        <a href="/register" class="btn register">
+            Register
+        </a>
+
+    </div>
+
+</body>
+</html>
